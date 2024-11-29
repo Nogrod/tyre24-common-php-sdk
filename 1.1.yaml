@@ -1,0 +1,2467 @@
+openapi: 3.1.0
+info:
+    title: 'API-B2B Common'
+    description: |4+
+          ## API Versioning
+        We're constantly updating and improving the API, and while we try to ensure backwards compatibility, there's always a chance that we'll introduce a change that affects the way your app works.
+
+        To get around any problems that this might cause, we recommend that you include the Accept header with every API request that you make. This header enables you to target your request to a particular version of the API. It looks like this in HTTP:
+
+        ```text
+        Accept: application/vnd.saitowag.api+json;version={version_number}
+        ```
+
+        Normally, you set the value of the placeholder to the current version of the API. But if you're troubleshooting your app, and you know that an older version of the API works perfectly, say version 1.0, you'd substitute 1.0 for the placeholder value. The API then handles the request as if it were for version 1.0, and your app goes back to working properly.
+
+        ### Example of an error with invalid `ACCEPT` header.
+        The `HTTP status code` in case of an invalid `ACCEPT` header will be `400 Bad Request` and the following response will be returned.
+        ```json
+          {
+            "data": [
+              {
+                "error_code": "ERR_ACCEPT_HEADER_NOT_VALID",
+                "error_message": "Accept header is not valid or not set."
+              }
+            ]
+          }
+        ```
+
+        ### Unexpected Error
+        If an unexpected error occours, a so called Error General will be returned.
+        The `HTTP status code` in case of an invalid `ACCEPT` header will be `500` and the following response will be returned.
+        ```json
+        {
+          "data": [
+            {
+              "error_code": "ERR_GENERAL",
+              "error_message": "An unexpected error has occurred. If this problem persists, please contact our support."
+            }
+          ]
+        }
+        ```
+
+        ### Invalid Endpoint Error
+        Any call to a non-existing API endpoint (i.e. wrong route) will return a response with `HTTP status code` `404`
+        and the following response body:
+        ```json
+        {
+          "data": [
+            {
+              "error_code": "ERR_GENERAL_INVALID_ENDPOINT",
+              "error_message": "The requested endpoint does not exist."
+            }
+          ]
+        }
+        ```
+
+        Please, note that this error is returned also when a request parameter, part of a valid route, is not well formed.
+        For example, a call to a route that contains a wrong order id (i.e. it does not meet the accepted order id pattern -
+        e.g. 123456789PAC instead of PAC123456789) will return the error just mentioned, as the route is considered as badly
+        formed.
+
+        In conclusion, please pay special attention to all those routes that have request parameters with specific pattern
+        requirements.
+
+        ### Shipping Method IDs
+        These ids may not be available in all the countries.
+
+        | ID | Name |
+        | --- | --- |
+        | 1 | Standard `Standard` |
+        | 2 | Self-collection `Selbstabholung`  |
+        | 3 | Express morning (truck) `Express-Morgen (LKW)` |
+        | 4 | Express Today (Truck)  `Express-Heute (LKW)` |
+        | 5 | Express morning (package forwarding) `Express-Morgen (Packet Spedition)` |
+        | 7 | Express-now |
+
+        ### Payment Method IDs
+        These ids may not be available in all the countries.
+
+        | ID | Name |
+        | --- | --- |
+        | 1 | SEPA Direct Debit `SEPA-Lastschrift` |
+        | 2 | Prepayment `Vorkasse` |
+        | 3 | Cash on delivery `Nachnahme` |
+        | 4 | PayPal/Credit Card `PayPal/Kreditkarte` |
+        | 5 | open payment method `offene Zahlungsart` |
+        | 7 | Invoice(8 days payment term) `Rechnung(8 Tage Zahlungsziel)` |
+        | 8 | open payment method (SEPA) `offene Zahlungsart (SEPA)` |
+
+        ## Query String Filters
+
+
+
+
+
+        <details>
+        <summary><strong id="query-string-filters">Query String Filters</strong></summary>
+
+        | Operator | Full Name | Description | Example |
+        | ------ | ------ | ------ | ------ |
+        | eq | Equal | Used to narrow down the result of a query to some specific value, for specified field. It adds the "**=**" symbol to the SQL query. Eg. `{url}?filter[{alias_name}]=eq;11` will result in the following sql: `SELECT {field_name} AS {alias_name} FROM {table_name} WHERE {alias_name} = 11` | integer: `{url}?filter[id]=eq;21`<br>float: `{url}?filter[average]=eq;3.7`<br>string: `{url}?filter[free_text]=eq;apple`<br>Date: `{url}?filter[birthday]=eq;2020-06-03`<br>DateTime: `{url}?filter[created_at]=eq;2020-06-03 14:32:32`<br>boolean: `{url}?filter[is_active]=eq;1`<br> |
+        | neq | Not equal | Used to exclude the value from a query result. It adds the "**<>**" symbol to the SQL query. Eg. `{url}?filter[{alias_name}]=neq;11` will result in the following sql: `SELECT {field_name} AS {alias_name} FROM {table_name} WHERE {alias_name} <> 11` | integer: `{url}?filter[id]=neq;21`<br>float: `{url}?filter[average]=neq;3.7`<br>string: `{url}?filter[free_text]=neq;apple`<br>Date: `{url}?filter[birthday]=neq;2020-06-03`<br>DateTime: `{url}?filter[created_at]=neq;2020-06-03 14:32:32`<br>boolean: `{url}?filter[is_active]=neq;1`<br> |
+        | gt | Greater than | Used to reduce fetched values to those greater than the one provided in a query string. It adds the "**>**" symbol to the SQL query. Eg. `{url}?filter[{alias_name}]=gt;11` will result in the following sql: `SELECT {field_name} AS {alias_name} FROM {table_name} WHERE {alias_name} > 11` | integer: `{url}?filter[id]=gt;21`<br>float: `{url}?filter[average]=gt;3.7`<br>Date: `{url}?filter[birthday]=gt;2020-06-03`<br>DateTime: `{url}?filter[created_at]=gt;2020-06-03 14:32:32`<br> |
+        | gte | Greater than or equal | Used to reduce fetched values to those greater than or equal to the one provided in a query string. It adds the "**>=**" symbol to the SQL query. Eg. `{url}?filter[{alias_name}]=gte;11` will result in the following sql: `SELECT {field_name} AS {alias_name} FROM {table_name} WHERE {alias_name} >= 11` | integer: `{url}?filter[id]=gte;21`<br>float: `{url}?filter[average]=gte;3.7`<br>Date: `{url}?filter[birthday]=gte;2020-06-03`<br>DateTime: `{url}?filter[created_at]=gte;2020-06-03 14:32:32`<br> |
+        | lt | Less than | Used to reduce fetched values to those less than provided in a query string. It adds the "**<**" symbol to the SQL query. Eg. `{url}?filter[{alias_name}]=lt;11` will result in the following sql: `SELECT {field_name} AS {alias_name} FROM {table_name} WHERE {alias_name} < 11` | integer: `{url}?filter[id]=lt;21`<br>float: `{url}?filter[average]=lt;3.7`<br>Date: `{url}?filter[birthday]=lt;2020-06-03`<br>DateTime: `{url}?filter[created_at]=lt;2020-06-03 14:32:32`<br> |
+        | lte | Less than or equal | Used to reduce fetched values to those less than or equal to the one provided in a query string. It adds the "**<=**" symbol to the SQL query. Eg. `{url}?filter[{alias_name}]=lte;11` will result in the following sql: `SELECT {field_name} AS {alias_name} FROM {table_name} WHERE {alias_name} <= 11` | integer: `{url}?filter[id]=lte;21`<br>float: `{url}?filter[average]=lte;3.7`<br>Date: `{url}?filter[birthday]=lte;2020-06-03`<br>DateTime: `{url}?filter[created_at]=lte;2020-06-03 14:32:32`<br> |
+        | in | In | Used to narrow down the query result to multiple, specific entries. It adds the **IN** keyword to the SQL query. Eg. `{url}?filter[{alias_name}]=in;1,2,3,4` will result in the following sql: `SELECT {field_name} AS {alias_name} FROM {table_name} WHERE {alias_name} IN (1, 2, 3, 4)` | integer: `{url}?filter[id]=in;21,55,76`<br>float: `{url}?filter[average]=in;3.7,6.5,9.9`<br>string: `{url}?filter[free_text]=in;apple,pear,watermelon`<br>Date: `{url}?filter[birthday]=in;2020-06-03,2021-10-13,2021-10-14`<br>DateTime: `{url}?filter[created_at]=in;2020-06-03 14:32:32,2020-09-12 17:35:32,2021-06-04 15:36:32`<br> |
+        | nin | Not in | Used to exclude multiple values from query result. It adds the **NOT IN** keyword to the SQL query. Eg. `{url}?filter[{alias_name}]=nin;1,2,3,4` will result in the following sql: `SELECT {field_name} AS {alias_name} FROM {table_name} WHERE {alias_name} NOT IN (1, 2, 3, 4)` | integer: `{url}?filter[id]=nin;21,55,76`<br>float: `{url}?filter[average]=nin;3.7,6.5,9.9`<br>string: `{url}?filter[free_text]=nin;apple,pear,watermelon`<br>Date: `{url}?filter[birthday]=nin;2020-06-03,2021-10-13,2021-10-14`<br>DateTime: `{url}?filter[created_at]=nin;2020-06-03 14:32:32,2020-09-12 17:35:32,2021-06-04 15:36:32`<br> |
+        | wc | Like | Used to find specified pattern. It adds the **LIKE** keyword to the SQL query. Eg. `{url}?filter[{alias_name}]=wc;j**n** doe` will result in the following sql: `SELECT {field_name} AS {alias_name} FROM {table_name} WHERE {alias_name} LIKE 'j%n% doe'` | string: `{url}?filter[free_text]=wc;j**n** doe`<br> |
+        | nwc | Not like | Used to find everything but the specified pattern. It adds the **NOT LIKE** keyword to the SQL query. Eg. `{url}?filter[{alias_name}]=nwc;j**n** doe` will result in the following sql: `SELECT {field_name} AS {alias_name} FROM {table_name} WHERE {alias_name} NOT LIKE 'j%n% doe'` | string: `{url}?filter[free_text]=nwc;j**n** doe`<br> |
+        | btw | Between | Used to find results containing values between two, specified values. It adds the **BETWEEN** keyword to the SQL query. Eg. `{url}?filter[{alias_name}]=btw;10,20` will result in the following sql: `SELECT {field_name} AS {alias_name} FROM {table_name} WHERE {alias_name} BETWEEN 10 AND 20` | integer: `{url}?filter[id]=btw;21,55`<br>float: `{url}?filter[average]=btw;3.7,6.5`<br>Date: `{url}?filter[birthday]=btw;2020-06-03,2021-10-13`<br>DateTime: `{url}?filter[created_at]=btw;2020-06-03 14:32:32,2020-09-12 17:35:32`<br> |
+        | rxp | Regular expression | Used to find results matching the regular expression. It adds the **REGEXP** keyword to the SQL query. Eg. `{url}?filter[{alias_name}]=rxp;j(oh\|a)ne` will result in the following sql: `SELECT {field_name} AS {alias_name} FROM {table_name} WHERE {alias_name} REGEXP 'j(oh\|a)ne?'` | string: `{url}?filter[free_text]=rxp;j(oh\|a)ne?`<br> |
+        | null | Is null | Used to find results that values of specified column are set to null. It adds the **IS NULL** keyword to the SQL query. Eg. `{url}?filter[{alias_name}]=null;` will result in the following sql: `SELECT {field_name} AS {alias_name} FROM {table_name} WHERE {alias_name} IS NULL` | integer: `{url}?filter[id]=null;`<br>float: `{url}?filter[average]=null;`<br>string: `{url}?filter[free_text]=null;`<br>Date: `{url}?filter[birthday]=null;`<br>DateTime: `{url}?filter[created_at]=null;`<br>boolean: `{url}?filter[is_active]=null;`<br> |
+        | nnull | Is not null | Used to find results that values of specified column are not set to null. It adds the **IS NOT NULL** keyword to the SQL query. Eg. `{url}?filter[{alias_name}]=nnull;` will result in the following sql: `SELECT {field_name} AS {alias_name} FROM {table_name} WHERE {alias_name} IS NOT NULL` | integer: `{url}?filter[id]=nnull;`<br>float: `{url}?filter[average]=nnull;`<br>string: `{url}?filter[free_text]=nnull;`<br>Date: `{url}?filter[birthday]=nnull;`<br>DateTime: `{url}?filter[created_at]=nnull;`<br>boolean: `{url}?filter[is_active]=nnull;`<br> |
+        </details>
+
+
+
+
+
+        ### Additional information
+        If you want to filter by multiple columns, you can do that, so `{url}?filter[id]=gt;3&filter[email]=like;**@gmail.com&filter[is_active]=eq;1` is a valid query string.
+
+        <strong>However you are not allowed to use one operator multiple times, for the same column.</strong> So `{url}?filter[id]=gte;3&filter[id]=lte;5` is not going to work and might result in unexpected behavior. You can achieve similar result using `{url}?filter[id]=btw;3,5`.
+
+        # Changelog
+
+        ## Added endpoints
+
+        - `PATCH /common/message/read`
+
+
+    contact:
+        name: 'ALZURA AG'
+        url: 'https://www.alzura.com'
+        email: info@alzura.com
+    version: '1.1'
+servers:
+    -
+        url: 'https://api-b2b.alzura.com'
+        description: 'Production server (uses live data)'
+paths:
+    /common/article-types:
+        get:
+            tags:
+                - articles
+            summary: 'Get the article types list.'
+            description: 'Get a full list of all available article types.'
+            operationId: getAvailableArticleTypesList
+            parameters:
+                -
+                    name: filter
+                    in: query
+                    required: false
+                    schema:
+                        type: array
+                        items:
+                            properties:
+                                type:
+                                    description: |
+                                        Filter the result set by article type.
+
+                                        Allowed operators are:
+
+                                        | operator | example |
+                                        | ------ | ------ |
+                                        | `eq` | `eq;1337` |
+                                        | `neq` | `neq;42` |
+                                        | `gt` | `gt;69` |
+                                        | `gte` | `gte;99` |
+                                        | `lt` | `lt;69` |
+                                        | `lte` | `lte;99` |
+                                        | `in` | `in;1,2,3` |
+                                        | `nin` | `nin;4,5,6` |
+                                        | `wc` | `wc;j**n** doe` |
+                                        | `nwc` | `nwc;john` |
+                                        | `btw` | `btw;10,20` |
+                                        | `rxp` | `rxp;j(oh\|a)ne?` |
+                                        | `null` | `null;` |
+                                        | `nnull` | `nnull;` |
+                                    type: string
+                                key:
+                                    description: |
+                                        Filter the result set by article key.
+
+                                        Allowed operators are:
+
+                                        | operator | example |
+                                        | ------ | ------ |
+                                        | `eq` | `eq;1337` |
+                                        | `neq` | `neq;42` |
+                                        | `gt` | `gt;69` |
+                                        | `gte` | `gte;99` |
+                                        | `lt` | `lt;69` |
+                                        | `lte` | `lte;99` |
+                                        | `in` | `in;1,2,3` |
+                                        | `nin` | `nin;4,5,6` |
+                                        | `wc` | `wc;j**n** doe` |
+                                        | `nwc` | `nwc;john` |
+                                        | `btw` | `btw;10,20` |
+                                        | `rxp` | `rxp;j(oh\|a)ne?` |
+                                        | `null` | `null;` |
+                                        | `nnull` | `nnull;` |
+                                    type: string
+                                activeInYear:
+                                    description: |
+                                        Filter the result set by activation year.
+
+                                        Allowed operators are:
+
+                                        | operator | example |
+                                        | ------ | ------ |
+                                        | `eq` | `eq;1337` |
+                                        | `neq` | `neq;42` |
+                                        | `gt` | `gt;69` |
+                                        | `gte` | `gte;99` |
+                                        | `lt` | `lt;69` |
+                                        | `lte` | `lte;99` |
+                                        | `in` | `in;1,2,3` |
+                                        | `nin` | `nin;4,5,6` |
+                                        | `wc` | `wc;j**n** doe` |
+                                        | `nwc` | `nwc;john` |
+                                        | `btw` | `btw;10,20` |
+                                        | `rxp` | `rxp;j(oh\|a)ne?` |
+                                        | `null` | `null;` |
+                                        | `nnull` | `nnull;` |
+                                    type: string
+                                onceActive:
+                                    description: |
+                                        Filter the result set by active article type.
+
+                                        Allowed operators are:
+
+                                        | operator | example |
+                                        | ------ | ------ |
+                                        | `eq` | `eq;1337` |
+                                        | `neq` | `neq;42` |
+                                        | `gt` | `gt;69` |
+                                        | `gte` | `gte;99` |
+                                        | `lt` | `lt;69` |
+                                        | `lte` | `lte;99` |
+                                        | `in` | `in;1,2,3` |
+                                        | `nin` | `nin;4,5,6` |
+                                        | `wc` | `wc;j**n** doe` |
+                                        | `nwc` | `nwc;john` |
+                                        | `btw` | `btw;10,20` |
+                                        | `rxp` | `rxp;j(oh\|a)ne?` |
+                                        | `null` | `null;` |
+                                        | `nnull` | `nnull;` |
+                                    type: string
+                            type: object
+                -
+                    name: country
+                    in: header
+                    description: 'country code in ISO 3166-1 alpha-2 (lowercase 2-letter country code).'
+                    required: true
+                    explode: false
+                    schema:
+                        type: string
+                    example: de
+                -
+                    name: Accept-Language
+                    in: header
+                    description: 'ISO 639-1 standard language codes. As default, even for invalid values, de_DE will be used!'
+                    required: false
+                    explode: false
+                    schema:
+                        type: string
+                    example: de_DE
+            responses:
+                '200':
+                    description: 'Returns an array of article types.'
+                    headers:
+                        Cache-Control:
+                            description: '<br /><br />_Example:_<br />`private, max-age=300`'
+                            schema:
+                                type: string
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/ResponseArticleType' } }
+                                type: object
+                '400':
+                    description: 'Missing or wrong parameters.'
+                    headers:
+                        Cache-Control:
+                            description: '<br /><br />_Example:_<br />`private, max-age=300`'
+                            schema:
+                                type: string
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/B2bFormError' } }
+                                type: object
+                            example:
+                                data:
+                                    - { error_code: ERR_PARAMETER_MISSING_COUNTRY, error_message: 'Missing country. Please use a country code in ISO 3166-1 alpha-2 (lowercase 2-letter country code, e.g. de).' }
+                                    - { error_code: ERR_PARAMETER_INVALID_COUNTRY_CODE, error_message: 'Invalid country code.' }
+                '401':
+                    description: 'Authentication failure.'
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { $ref: '#/components/schemas/AccessControlErrorResponse' }
+                                type: object
+            security:
+                -
+                    X-AUTH-TOKEN: []
+                -
+                    OAuthAccessToken: []
+    /common/document:
+        get:
+            tags:
+                - documents
+            summary: 'Get base64 encoded documents.'
+            description: |-
+                Get one or more base64 encoded documents defined by type and id. For example, if no id is given and the type is DEBIT_AGREEMENT, the endpoint returns all your debit agreements.
+
+                Possible document types:
+
+                | Document type |
+                | ------ |
+                | DEBIT_AGREEMENT |
+                | BUSINESS_REGISTRATION |
+                | SELLER_INVOICE |
+                | DELIVERY_NOTE |
+                | TRAVEL_COUPON |
+                | REFUND |
+                | PRODUCT_{product_area_abbreviation}_AGREEMENT ({product_area_abbreviation} is a two-letter id, that identifies an area that requires a product agreement; e.g. AC) |
+            operationId: getDocumentsByTypeAndId
+            parameters:
+                -
+                    name: filter
+                    in: query
+                    required: false
+                    schema:
+                        type: array
+                        items:
+                            properties:
+                                id:
+                                    description: |
+                                        Filter for a specific document id.
+
+                                        Allowed operators are:
+
+                                        | operator | example |
+                                        | ------ | ------ |
+                                        | `eq` | `eq;1337` |
+                                        | `neq` | `neq;42` |
+                                        | `gt` | `gt;69` |
+                                        | `gte` | `gte;99` |
+                                        | `lt` | `lt;69` |
+                                        | `lte` | `lte;99` |
+                                        | `btw` | `btw;10,20` |
+                                        | `in` | `in;1,2,3` |
+                                        | `nin` | `nin;4,5,6` |
+                                    type: integer
+                                retailer_id:
+                                    description: |
+                                        Filter for documents of a specific retailer.
+
+                                        Allowed operators are:
+
+                                        | operator | example |
+                                        | ------ | ------ |
+                                        | `eq` | `eq;1337` |
+                                        | `neq` | `neq;42` |
+                                        | `gt` | `gt;69` |
+                                        | `gte` | `gte;99` |
+                                        | `lt` | `lt;69` |
+                                        | `lte` | `lte;99` |
+                                        | `btw` | `btw;10,20` |
+                                        | `in` | `in;1,2,3` |
+                                        | `nin` | `nin;4,5,6` |
+                                    type: integer
+                                supplier_id:
+                                    description: |
+                                        Filter for documents of a specific supplier.
+
+                                        Allowed operators are:
+
+                                        | operator | example |
+                                        | ------ | ------ |
+                                        | `eq` | `eq;1337` |
+                                        | `neq` | `neq;42` |
+                                        | `gt` | `gt;69` |
+                                        | `gte` | `gte;99` |
+                                        | `lt` | `lt;69` |
+                                        | `lte` | `lte;99` |
+                                        | `btw` | `btw;10,20` |
+                                        | `in` | `in;1,2,3` |
+                                        | `nin` | `nin;4,5,6` |
+                                    type: integer
+                                active:
+                                    description: |
+                                        Filter only for active or inactive documents (is either 1 or 0).
+
+                                        Allowed operators are:
+
+                                        | operator | example |
+                                        | ------ | ------ |
+                                        | `eq` | `eq;1` |
+                                        | `neq` | `neq;0` |
+                                    type: boolean
+                            type: object
+                -
+                    name: country
+                    in: header
+                    description: 'country code in ISO 3166-1 alpha-2 (lowercase 2-letter country code).'
+                    required: true
+                    explode: false
+                    schema:
+                        type: string
+                    example: de
+                -
+                    name: limit
+                    in: query
+                    description: |-
+                        Limit your search to list only a specific amount of records.
+
+                        If you leave the field blank, all records will be returned.
+                    required: false
+                    explode: true
+                    schema:
+                        type: integer
+                    example: 10
+                -
+                    name: offset
+                    in: query
+                    description: |-
+                        Paginate the result of your search.
+
+                        _If **limit** is not being passed, the value passed to offset will be ignored._
+                    required: false
+                    explode: true
+                    schema:
+                        type: integer
+                    example: 0
+                -
+                    name: order
+                    in: query
+                    description: 'Filter documents by order id.'
+                    required: true
+                    explode: true
+                    schema:
+                        type: string
+                    example: PAC123456
+                -
+                    name: type
+                    in: query
+                    description: 'Filter documents by type.'
+                    required: true
+                    explode: true
+                    schema:
+                        type: string
+                    example: DEBIT_AGREEMENT
+            responses:
+                '200':
+                    description: 'Returns a list of documents that match the given request parameters.'
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { $ref: '#/components/schemas/ResponseDocument' }
+                                type: object
+                '400':
+                    description: 'Missing or wrong parameters.'
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/B2bFormError' } }
+                                type: object
+                            example:
+                                data:
+                                    - { error_code: ERR_PARAMETER_MISSING_COUNTRY, error_message: 'Missing country. Please use a country code in ISO 3166-1 alpha-2 (lowercase 2-letter country code, e.g. de).' }
+                                    - { error_code: ERR_PARAMETER_INVALID_COUNTRY_CODE, error_message: 'Invalid country code.' }
+                                    - { error_code: ERR_DOCUMENT_INVALID_TYPE, error_message: 'Invalid document type.' }
+                                    - { error_code: ERR_DOCUMENT_MISSING_TYPE, error_message: 'Missing document type.' }
+                                    - { error_code: ERR_PARAMETER_MISSING_ORDER_ID, error_message: 'Missing order id.' }
+                                    - { error_code: ERR_UNACCESSIBLE_ORDER, error_message: 'You do not have access to this order.' }
+                                    - { error_code: ERR_ORDER_NOT_VALID, error_message: 'Invalid order.' }
+                                    - { error_code: ERR_ORDER_PREFIX_MISSING, error_message: "The prefix of the order number is missing. An example of a correct order number: 'PAC10295620919'." }
+                                    - { error_code: ERR_DOCUMENT_INVALID_TYPE, error_message: 'Invalid document type.' }
+                '401':
+                    description: 'Authentication failure.'
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { $ref: '#/components/schemas/AccessControlErrorResponse' }
+                                type: object
+            security:
+                -
+                    X-AUTH-TOKEN: []
+                -
+                    OAuthAccessToken: []
+    /common/login:
+        get:
+            tags:
+                - authentication
+            summary: 'Get a login token and expire date.'
+            description: "Returns the X-AUTH-TOKEN which is required for authentication of the remaining endpoints. Authentication for this endpoint is basic auth. For authentication, an authentication-header formatted as 'Alzura ID:Password' must be transmitted as a base64-encoded string."
+            operationId: loginUser
+            responses:
+                '200':
+                    description: 'Returns the token with the expiration date.'
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { $ref: '#/components/schemas/LoginToken' }
+                                type: object
+                '401':
+                    description: "Authentication failed. Check that your 'Alzura ID:Password' is correct"
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { $ref: '#/components/schemas/ResponseAuthError' }
+                                type: object
+            security:
+                -
+                    basicAuth: []
+    /common/message/read:
+        patch:
+            tags:
+                - messages
+            summary: 'Mark messages as read'
+            description: 'Mark messages as read by specifying the message ids in the request body.'
+            operationId: markMessagesReadByMessageIds
+            parameters:
+                -
+                    name: Content-Type
+                    in: header
+                    description: 'The content type for all json requests. If not specified, errors related to missing required request body parameters will be returned.'
+                    required: false
+                    explode: false
+                    schema:
+                        type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/MessageIds'
+            responses:
+                '204':
+                    description: 'No content. The request was successful, but the answer deliberately contains no data.'
+                '400':
+                    description: 'Missing or wrong parameters.'
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/B2bFormError' } }
+                                type: object
+                            example:
+                                data:
+                                    - { error_code: ERR_PARAMETER_MISSING_MESSAGE_ID, error_message: 'The message ids which should be provided in the request body are missing.' }
+                                    - { error_code: ERR_NOT_ALL_UPDATED, error_message: 'Not all messages where updated. This could be because of missing rights.' }
+                                    - { error_code: ERR_MESSAGE_ID_MUST_BE_POSITIVE, error_message: 'The message ids must be positive.' }
+                                    - { error_code: ERR_VALUE_INVALID, error_message: 'Some message ids are wrong. Please check that all entries are correct.' }
+                                    - { error_code: ERR_VALUE_MESSAGE_ID_INVALID, error_message: 'Some message ids are wrong. Please check if message ids are correct array.' }
+                '401':
+                    description: 'Authentication failure.'
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { $ref: '#/components/schemas/AccessControlErrorResponse' }
+                                type: object
+            security:
+                -
+                    X-AUTH-TOKEN: []
+                -
+                    OAuthAccessToken: []
+    '/common/order/{order}':
+        get:
+            tags:
+                - orders
+            summary: 'Get the details of a given order.'
+            description: 'Get the details of a given order for the given order id.'
+            operationId: getOrderDetailsByOrderId
+            parameters:
+                -
+                    name: country
+                    in: header
+                    description: 'country code in ISO 3166-1 alpha-2 (lowercase 2-letter country code).'
+                    required: true
+                    explode: false
+                    schema:
+                        type: string
+                    example: de
+                -
+                    name: order
+                    in: path
+                    required: true
+                    schema:
+                        description: 'The order id.'
+                        type: string
+                        example: PAC12345670121
+            responses:
+                '200':
+                    description: 'The order details for the given order id.'
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/ResponseDetails' } }
+                                type: object
+                '400':
+                    description: 'Missing or wrong parameters.'
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/B2bFormError' } }
+                                type: object
+                            example:
+                                data:
+                                    - { error_code: ERR_PARAMETER_MISSING_COUNTRY, error_message: 'Missing country. Please use a country code in ISO 3166-1 alpha-2 (lowercase 2-letter country code, e.g. de).' }
+                                    - { error_code: ERR_PARAMETER_INVALID_COUNTRY_CODE, error_message: 'Invalid country code.' }
+                                    - { error_code: ERR_UNACCESSIBLE_ORDER, error_message: 'You do not have access to this order.' }
+                                    - { error_code: ERR_ORDER_ARCHIVED, error_message: 'Inaccessible archived order.' }
+                                    - { error_code: ERR_ORDER_NOT_VALID, error_message: 'Invalid order.' }
+                                    - { error_code: ERR_ORDER_PREFIX_MISSING, error_message: "The prefix of the order number is missing. An example of a correct order number: 'PAC10295620919'." }
+                '401':
+                    description: 'Authentication failure.'
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { $ref: '#/components/schemas/AccessControlErrorResponse' }
+                                type: object
+            security:
+                -
+                    X-AUTH-TOKEN: []
+                -
+                    OAuthAccessToken: []
+    /common/latestorders:
+        get:
+            tags:
+                - orders
+            summary: 'Retrieve the latest orders.'
+            description: |
+                Retrieve the latest orders since the last call to this endpoint of the requesting active customer.
+                As a **supplier** it is possible to support order cancellation by the buyer. In this case every order will only be delivery via this endpoint with a time delay of 5 minutes.
+                The definition of active customer changes according to its type:
+                - a **supplier** is always considered to be active in the request country (country set in the request headers) and the response will include all orders from all active countries, regardless of the request country;
+                - a **retailer** is considered to be active in the request country if:
+                     - its country (i.e. country associated to its profile) is equal to the request country;
+                     - its country is **NOT** equal to the request country, **BUT** the *'include-child-branches'* flag is active **AND** at least one of its child branches's country is equal to the request country;
+
+                This endpoint has request limits. Currently, it allows a logged-in user to send 2 request every 300 seconds (5 minutes).
+            operationId: getLatestOrders
+            parameters:
+                -
+                    name: country
+                    in: header
+                    description: 'country code in ISO 3166-1 alpha-2 (lowercase 2-letter country code).'
+                    required: true
+                    explode: false
+                    schema:
+                        type: string
+                    example: de
+                -
+                    name: counter
+                    in: query
+                    description: |
+                        Default 0. Data records are combined by the interface into blocks that can be retrieved again.
+                    required: false
+                    explode: true
+                    schema:
+                        type: integer
+                -
+                    name: no_tagging
+                    in: query
+                    description: |-
+                        0: the returned orders are set with the next available counter, if not previously retrieved,
+                        and marked with access time (the access time will not be changed by subsequent calls with no_tagging=0); 1: the
+                        returned orders are set with the next available counter, if not previously retrieved, but no access time will be
+                        set.
+                    required: false
+                    explode: true
+                    schema:
+                        type: boolean
+                -
+                    name: tracking_number
+                    in: query
+                    description: 'Valid values are: 0 = all orders, 1 = only orders with tracking, 2 = only orders without tracking'
+                    required: false
+                    explode: true
+                    schema:
+                        type: string
+                -
+                    name: order_role
+                    in: query
+                    description: 'Valid values are: SELLER, BUYER, SELLER_OR_BUYER, SELLER_AND_BUYER'
+                    required: false
+                    explode: true
+                    schema:
+                        type: string
+                -
+                    name: demo
+                    in: query
+                    description: '0: Real data is returned (default), 1: Demo data is returned.'
+                    required: false
+                    explode: true
+                    schema:
+                        type: boolean
+            responses:
+                '200':
+                    description: 'Returns a list of the latest orders since the last call to this endpoint.'
+                    headers:
+                        X-RateLimit-Limit:
+                            description: 'Total number of requests allowed for the logged-in user in a given period of time. (Maximum 2 requests in 300 seconds)'
+                            schema:
+                                type: integer
+                        X-RateLimit-Remaining:
+                            description: 'Remaining requests allowed to the logged-in user. (Example: 1)'
+                            schema:
+                                type: integer
+                        X-RateLimit-Reset:
+                            description: 'The timestamp when the limit will be reset to its initial value.'
+                            schema:
+                                type: integer
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/ResponseOrderLatest' } }
+                                type: object
+                '400':
+                    description: 'Missing or wrong parameters.'
+                    headers:
+                        X-RateLimit-Limit:
+                            description: 'Total number of requests allowed for the logged-in user in a given period of time. (Maximum 2 requests in 300 seconds)'
+                            schema:
+                                type: integer
+                        X-RateLimit-Remaining:
+                            description: 'Remaining requests allowed to the logged-in user. (Example: 1)'
+                            schema:
+                                type: integer
+                        X-RateLimit-Reset:
+                            description: 'The timestamp when the limit will be reset to its initial value.'
+                            schema:
+                                type: integer
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/B2bFormError' } }
+                                type: object
+                            example:
+                                data:
+                                    - { error_code: ERR_PARAMETER_MISSING_COUNTRY, error_message: 'Missing country. Please use a country code in ISO 3166-1 alpha-2 (lowercase 2-letter country code, e.g. de).' }
+                                    - { error_code: ERR_PARAMETER_INVALID_COUNTRY_CODE, error_message: 'Invalid country code.' }
+                                    - { error_code: ERR_PARAMETER_INVALID_ROLE, error_message: 'Invalid role.' }
+                                    - { error_code: ERR_VALUE_INVALID, error_message: 'An error occurred while validating the given parameters. Please, check that all given parameters are correct.' }
+                                    - { error_code: ERR_PARAMETER_INVALID_TRACKING_NUMBER_LAST_ORDERS, error_message: 'A wrong option for tracking was passed.' }
+                                    - { error_code: ERR_CUSTOMER_NOT_ACTIVE_IN_COUNTRY, error_message: 'The customer is not active in this country.' }
+                '429':
+                    description: 'Request limit exceeded.'
+                    headers:
+                        X-RateLimit-Limit:
+                            description: 'Total number of requests allowed for the logged-in user in a given period of time. (Maximum 2 requests in 300 seconds)'
+                            schema:
+                                type: integer
+                        X-RateLimit-Remaining:
+                            description: 'Remaining requests allowed to the logged-in user. (Example: 1)'
+                            schema:
+                                type: integer
+                        X-RateLimit-Reset:
+                            description: 'The timestamp when the limit will be reset to its initial value.'
+                            schema:
+                                type: integer
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/B2bFormError' } }
+                                type: object
+                            example:
+                                data:
+                                    - { error_code: ERR_REQUEST_LIMIT_EXCEEDED, error_message: 'The request limit has been reached.' }
+                '401':
+                    description: 'Authentication failure.'
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { $ref: '#/components/schemas/AccessControlErrorResponse' }
+                                type: object
+            security:
+                -
+                    X-AUTH-TOKEN: []
+                -
+                    OAuthAccessToken: []
+    /common/order-status:
+        get:
+            tags:
+                - orders
+            summary: 'Get a list of order statuses.'
+            description: |-
+                Return a list of all available order statuses.
+
+                Possible status ids and their meaning are listed here below:
+
+                | Status ID | Meaning |
+                | ------ | ------ |
+                | -1 | If the status of an order is -1 this means it has no status. This only can occur in historic orders and will not be delivered in this response. |
+                | 0 | The order is currently in the queue. |
+                | 1 | The order is currently being processed and is not yet dispatched. |
+                | 2 | The order has been processed and is currently being dispatched. |
+                | 3 | The order is completed. The goods are on the way. |
+                | 4 | The order was rejected. |
+                | 5 | Unfortunately the item is out of stock. |
+                | 6 | The order was partially canceled. |
+                | 7 | Customer cancellation by supplier. |
+                | 8 | Customer cancellation. |
+            operationId: getAvailableOrderStatusesList
+            parameters:
+                -
+                    name: filter
+                    in: query
+                    required: false
+                    schema:
+                        type: array
+                        items:
+                            properties:
+                                id:
+                                    description: |
+                                        Filter the result set by status id.
+
+                                        Allowed operators are:
+
+                                        | operator | example |
+                                        | ------ | ------ |
+                                        | `eq` | `eq;1337` |
+                                    type: integer
+                                send_mail:
+                                    description: |
+                                        Filter the result set by send-email flag.
+
+                                        Allowed operators are:
+
+                                        | operator | example |
+                                        | ------ | ------ |
+                                        | `eq` | `eq;1` |
+                                    type: boolean
+                                key:
+                                    description: |
+                                        Filter the result set by key.
+
+                                        Allowed operators are:
+
+                                        | operator | example |
+                                        | ------ | ------ |
+                                        | `eq` | `eq;john doe` |
+                                    type: string
+                                settableByBuyer:
+                                    description: |
+                                        All order statuses that can be set by the buyer
+
+                                        Allowed operators are:
+
+                                        | operator | example |
+                                        | ------ | ------ |
+                                        | `eq` | `eq;1337` |
+                                    type: string
+                                settableBySeller:
+                                    description: |
+                                        All order statuses that can be set by the seller
+
+                                        Allowed operators are:
+
+                                        | operator | example |
+                                        | ------ | ------ |
+                                        | `eq` | `eq;1337` |
+                                    type: string
+                            type: object
+                -
+                    name: Accept-Language
+                    in: header
+                    description: 'ISO 639-1 standard language codes. As default, even for invalid values, de_DE will be used!'
+                    required: false
+                    explode: false
+                    schema:
+                        type: string
+                    example: de_DE
+            responses:
+                '200':
+                    description: 'Returns a list of all order statuses.'
+                    headers:
+                        Cache-Control:
+                            description: '<br /><br />_Example:_<br />`private, max-age=300`'
+                            schema:
+                                type: string
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/ResponseStatus' } }
+                                type: object
+                '401':
+                    description: 'Authentication failure.'
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { $ref: '#/components/schemas/AccessControlErrorResponse' }
+                                type: object
+            security:
+                -
+                    X-AUTH-TOKEN: []
+                -
+                    OAuthAccessToken: []
+    /common/payment-methods:
+        get:
+            tags:
+                - payments
+            summary: 'Get all available payment methods for the authenticated user in the given country.'
+            description: 'With this endpoint you can retrieve a list of all payment methods, available to the authenticated user in the given country.'
+            operationId: getPaymentMethodsForAuthenticatedUser
+            parameters:
+                -
+                    name: country
+                    in: header
+                    description: 'country code in ISO 3166-1 alpha-2 (lowercase 2-letter country code).'
+                    required: true
+                    explode: false
+                    schema:
+                        type: string
+                    example: de
+            responses:
+                '200':
+                    description: 'List of payment methods'
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/ResponseCommonGetPaymentMethods' } }
+                                type: object
+                '400':
+                    description: 'Error example'
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/B2bFormError' } }
+                                type: object
+                            example:
+                                data:
+                                    - { error_code: ERR_PARAMETER_MISSING_COUNTRY, error_message: 'Missing country. Please use a country code in ISO 3166-1 alpha-2 (lowercase 2-letter country code, e.g. de)' }
+                                    - { error_code: ERR_PARAMETER_INVALID_COUNTRY_CODE, error_message: 'Invalid country code.' }
+                '401':
+                    description: 'Authentication failure.'
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { $ref: '#/components/schemas/AccessControlErrorResponse' }
+                                type: object
+            security:
+                -
+                    X-AUTH-TOKEN: []
+                -
+                    OAuthAccessToken: []
+    /common/shipping-companies:
+        get:
+            tags:
+                - shipping
+            summary: 'Get a list of shipping companies in a given country.'
+            description: 'With this endpoint you can retrieve a list of all supported shipping companies for a given country. The response will contain an internal id, the name of the shipping company and a url that can be used to compose a tracking url. In the tracking url is a placeholder that must be replaced with a given tracking number'
+            operationId: getShippingCompaniesByCountry
+            parameters:
+                -
+                    name: filter
+                    in: query
+                    required: false
+                    schema:
+                        type: array
+                        items:
+                            properties:
+                                id:
+                                    description: |
+                                        Filter for a specific shipping company id
+
+                                        Allowed operators are:
+
+                                        | operator | example |
+                                        | ------ | ------ |
+                                        | `eq` | `eq;1337` |
+                                        | `neq` | `neq;42` |
+                                        | `gt` | `gt;69` |
+                                        | `gte` | `gte;99` |
+                                        | `lt` | `lt;69` |
+                                        | `lte` | `lte;99` |
+                                        | `btw` | `btw;10,20` |
+                                        | `in` | `in;1,2,3` |
+                                        | `nin` | `nin;4,5,6` |
+                                    type: integer
+                                name:
+                                    description: |
+                                        Filter for a specific shipping company name
+
+                                        Allowed operators are:
+
+                                        | operator | example |
+                                        | ------ | ------ |
+                                        | `eq` | `eq;john doe` |
+                                        | `neq` | `neq;doe john` |
+                                        | `in` | `in;john,jane,doe` |
+                                        | `nin` | `nin;john,jane,doe` |
+                                        | `wc` | `wc;j**n** doe` |
+                                        | `nwc` | `nwc;john` |
+                                        | `rxp` | `rxp;j(oh\|a)ne?` |
+                                    type: string
+                            type: object
+                -
+                    name: country
+                    in: header
+                    description: 'country code in ISO 3166-1 alpha-2 (lowercase 2-letter country code).'
+                    required: true
+                    explode: false
+                    schema:
+                        type: string
+                    example: de
+                -
+                    name: sort
+                    in: query
+                    description: |
+                        Sort the result of your search.
+
+                        _If the key to sort starts with a **-**, then the result is sorted in descending order._
+                        _If the sort key starts with a **+** or only the key is specified, the result is sorted in ascending order._
+
+                        Available sorters:
+
+                        | name | description | example |
+                        | ------ | ----------- | ------- |
+                        | id | Sort the result by id | -id |
+                        | name | Sort the result by name | -name |
+                    required: false
+                    schema:
+                        type: string
+                    example: '-id,-name'
+            responses:
+                '200':
+                    description: 'List of shipping companies'
+                    headers:
+                        Cache-Control:
+                            description: '<br /><br />_Example:_<br />`private, max-age=300`'
+                            schema:
+                                type: string
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/ResponseCommonGetShippingCompany' } }
+                                type: object
+                '400':
+                    description: 'Error example'
+                    headers:
+                        Cache-Control:
+                            description: '<br /><br />_Example:_<br />`private, max-age=300`'
+                            schema:
+                                type: string
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/B2bFormError' } }
+                                type: object
+                            example:
+                                data:
+                                    - { error_code: ERR_PARAMETER_MISSING_COUNTRY, error_message: 'Missing country. Please use a country code in ISO 3166-1 alpha-2 (lowercase 2-letter country code, e.g. de)' }
+                                    - { error_code: ERR_PARAMETER_INVALID_COUNTRY_CODE, error_message: 'Invalid country code.' }
+                '401':
+                    description: 'Authentication failure.'
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { $ref: '#/components/schemas/AccessControlErrorResponse' }
+                                type: object
+            security:
+                -
+                    X-AUTH-TOKEN: []
+                -
+                    OAuthAccessToken: []
+    /ping:
+        get:
+            tags:
+                - ping
+            summary: Ping.
+            description: 'Endpoint just returns pong. If you get any response, your connection is working and the API itself is up and running.'
+            operationId: ping
+            responses:
+                '200':
+                    description: Example
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/ResponsePing' } }
+                                type: object
+components:
+    schemas:
+        AccessControlErrorResponse:
+            title: AccessControlErrorResponse
+            properties:
+                error:
+                    description: 'The authentication error code.'
+                    type: string
+                    example: ERR_AUTHENTICATION_FAILURE
+            type: object
+        ResponseArticleType:
+            title: Type
+            required:
+                - type
+                - key
+                - name
+                - name_de
+            properties:
+                type:
+                    description: 'type of article'
+                    type: string
+                    example: R
+                key:
+                    description: 'api key of article'
+                    type: string
+                    example: ARTICLE_TYPE_TYRE
+                name:
+                    description: 'name of article'
+                    type: string
+                    example: Reifen
+                name_de:
+                    description: 'the German description of the article'
+                    type: string
+                    example: 'Produktdatenbank - Zubehör'
+            type: object
+        B2bFormError:
+            title: B2bFormError
+            required:
+                - error_code
+                - error_message
+            properties:
+                error_code:
+                    description: 'Generic error code'
+                    type: string
+                    example: ERR_EXAMPLE_ERROR
+                error_message:
+                    description: 'Translation of error code'
+                    type: string
+                    example: 'This is a translation for the ERR_EXAMPLE_ERROR'
+            type: object
+        ResponseDocument:
+            title: Document
+            required:
+                - type
+                - document_count
+                - documents
+            properties:
+                type:
+                    description: 'Document type'
+                    type: string
+                    example: DEBIT_AGREEMENT
+                document_count:
+                    description: 'Number of documents bundled in the pdf'
+                    type: integer
+                    example: 3
+                documents:
+                    description: 'Details of the documents contained in the pdf'
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ResponseDocumentData'
+            type: object
+        LoginToken:
+            title: LoginToken
+            required:
+                - token
+                - expire_date
+            properties:
+                token:
+                    description: 'Login token for customer'
+                    type: string
+                    example: ODllMmVhMzAwZWE2NmI2MGE2Nzc3NGZkY2Y0NWViYWU1OTY5ODJhN2U5NWNlMGY5NmM2ZjQ0ZDY3NjVmMjY4OGNkMDMwNzhmYTYzYWFjMjYzYTc2ODM0ZGFmZDc2M2ViYzc4YTEyMGQ1MDNiYWQ=
+                expire_date:
+                    description: 'Expire date from token'
+                    type: string
+                    example: '2099-10-31'
+            type: object
+        ResponseAuthError:
+            title: AuthError
+            required:
+                - error
+            properties:
+                error:
+                    description: 'Authentication error'
+                    type: string
+                    example: ERR_AUTHENTICATION_FAILURE
+            type: object
+        MessageIds:
+            title: MessageIds
+            required:
+                - message_ids
+            properties:
+                message_ids:
+                    description: 'The message ids'
+                    type: array
+                    example:
+                        - 314159
+                        - 265359
+                    items:
+                        type: integer
+            type: object
+        ResponseDetails:
+            title: OrderDetails
+            required:
+                - buyer
+                - has_coupon
+                - coupon_status
+                - is_payed
+                - is_partially_cancelled
+                - can_request_tracking
+                - request_tracking_interval
+                - can_request_invoice
+                - request_invoice_interval
+                - can_request_refund
+                - request_refund_interval
+                - can_request_delivery_note
+                - request_delivery_note_interval
+                - reference_number
+                - country
+                - comment
+                - shipping
+                - assurance
+                - payment
+                - invoice
+                - messages
+                - documents
+                - status_comment
+                - order
+                - date
+                - status
+            properties:
+                buyer:
+                    description: 'All information of the buyer'
+                    type: object
+                    $ref: '#/components/schemas/businessPartner'
+                seller:
+                    description: 'All information of the seller. Note: This property is only returned when logged in with a retailer account.'
+                    type: object
+                    $ref: '#/components/schemas/businessPartner'
+                child_branch:
+                    description: 'Child branch information'
+                    type: object
+                    $ref: '#/components/schemas/ChildBranch'
+                has_coupon:
+                    description: 'True if the order includes coupon as a gift, otherwise false'
+                    type: boolean
+                    example: true
+                coupon_status:
+                    description: 'Coupon status. 0 = not printed, 1 = printed, 2 = used for 800 eur coupon'
+                    type: integer
+                    example: 0
+                is_payed:
+                    description: 'True if the order was payed for, otherwise false'
+                    type: boolean
+                    example: true
+                can_be_cancelled:
+                    description: 'Describes if the order can be cancelled. This field will only be in the response, if authenticated as a retailer.'
+                    type: boolean
+                    example: true
+                is_partially_cancelled:
+                    description: 'Describes if the order is partially cancelled'
+                    type: boolean
+                    example: true
+                can_request_tracking:
+                    description: 'Whether or not a tracking information can be requested. A tracking information can be requested if no other requests were sent in the tracking-request time interval.'
+                    type: boolean
+                    example: true
+                request_tracking_interval:
+                    description: 'Request tracking interval in minutes: The request can be made only once per interval.'
+                    type: integer
+                    example: 1440
+                can_request_invoice:
+                    description: 'Whether or not an invoice can be requested. An invoice can be requested if no invoice is uploaded or if no other invoice requests were sent in the invoice-request time interval.'
+                    type: boolean
+                    example: true
+                request_invoice_interval:
+                    description: 'Request invoice interval in minutes: The request can be made only once per interval.'
+                    type: integer
+                    example: 1440
+                can_request_refund:
+                    description: 'Whether or not a refund can be requested. An refund can be requested if an invoice is uploaded or if no other refund requests were sent in the invoice-request time interval.'
+                    type: boolean
+                    example: true
+                request_refund_interval:
+                    description: 'Request refund interval in minutes: The request can be made only once per interval.'
+                    type: integer
+                    example: 1440
+                can_request_delivery_note:
+                    description: 'Whether or not a delivery note can be requested. A delivery note can be requested if no invoice and/or delivery note is already uploaded or if no other delivery note requests were sent in the delivery-note-request time interval.'
+                    type: boolean
+                    example: true
+                request_delivery_note_interval:
+                    description: 'Request delivery note interval in minutes: The request can be made only once per interval'
+                    type: integer
+                    example: 1440
+                reference_number:
+                    description: 'Reference number of an order, if given'
+                    type: string
+                    example: 'this can be any string'
+                country:
+                    description: 'The country of the order, 2 letter iso-code lower case'
+                    type: string
+                    example: de
+                comment:
+                    description: 'A comment for the order'
+                    type: string
+                    example: '~ Versandart: Priority-Shipping! Express - Morgen (Paket): 30 Euro'
+                currency:
+                    description: 'Currency information for this order'
+                    type: object
+                    $ref: '#/components/schemas/Currency'
+                shipping:
+                    description: 'Shipping information'
+                    type: object
+                    $ref: '#/components/schemas/Shipping'
+                assurance:
+                    description: 'Insurance information'
+                    type: object
+                    $ref: '#/components/schemas/Assurance'
+                payment:
+                    description: 'Payment information'
+                    type: object
+                    $ref: '#/components/schemas/Payment'
+                invoice:
+                    description: 'Contains seller invoice information'
+                    type: object
+                    $ref: '#/components/schemas/Invoice'
+                messages:
+                    description: 'List of chat messages for this order'
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Message'
+                documents:
+                    description: 'List of documents for this order'
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Document'
+                status_comment:
+                    description: 'Comment to the current oder status'
+                    type: string
+                    example: 'Auftrag befindet sich in der Post!'
+                tagging_counter:
+                    description: 'Tagging count'
+                    type: integer
+                    example: 4711
+                cart_order_id:
+                    description: 'Contains the cart order id of this order if it is a cart order.'
+                    type: integer
+                    example: 12278919
+                order:
+                    description: 'The identifier of an order'
+                    type: string
+                    example: PAC1234567890719
+                date:
+                    description: 'Date of an order (time zone Europe/Berlin)'
+                    type: string
+                    example: '2019-06-03 14:09:14'
+                status:
+                    description: 'Status of the order'
+                    type: integer
+                    example: 5
+                is_marketplace:
+                    description: 'True if marketplace order otherwise false'
+                    type: boolean
+                    example: true
+                positions:
+                    description: 'List of associated positions of the order'
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/OrderPosition'
+                sum:
+                    description: 'The summed up price of all product positions of the given order'
+                    type: object
+                    $ref: '#/components/schemas/Price'
+                total_sum:
+                    description: 'The final price that has to be paid by the retailer (except for any possible `deposit`). This price includes, among other things, the item total (`sum`), costs of the payment method (`payment.method.price`), costs for alternative delivery address (`shipping.delivery_address.price`), shipping costs (`shipping.method.price`) and possible discounts (`shipping.handling_fee`).'
+                    type: object
+                    $ref: '#/components/schemas/Price'
+                deposit:
+                    description: 'Summed up deposit price for the order'
+                    type: object
+                    $ref: '#/components/schemas/Price'
+            type: object
+        ResponseOrderLatest:
+            title: OrderLatest
+            required:
+                - reference_number
+                - country
+                - comment
+                - buyer
+                - shipping
+                - payment
+                - documents
+                - order
+                - date
+                - status
+            properties:
+                reference_number:
+                    description: 'Reference number of an order, if given'
+                    type: string
+                    example: 'this can be any string'
+                country:
+                    description: 'Country of the order, 2 letter iso-code lower case'
+                    type: string
+                    example: de
+                comment:
+                    description: 'A comment for the order'
+                    type: string
+                    example: '~ Versandart: Priority-Shipping! Express - Morgen (Paket): 30 Euro'
+                buyer:
+                    description: 'All information of the buyer'
+                    type: object
+                    $ref: '#/components/schemas/businessPartnerLatest'
+                seller:
+                    description: 'All information of the seller. Note: This property is only returned when logged in with a retailer account.'
+                    type: object
+                    $ref: '#/components/schemas/businessPartnerLatest'
+                currency:
+                    description: 'Currency information for this order'
+                    type: object
+                    $ref: '#/components/schemas/Currency'
+                shipping:
+                    description: 'All shipping information for this order'
+                    type: object
+                    $ref: '#/components/schemas/Shipping'
+                payment:
+                    description: 'All payment information for this order'
+                    type: object
+                    $ref: '#/components/schemas/Payment'
+                documents:
+                    description: 'A list of the associated documents'
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Document'
+                tagging_counter:
+                    description: 'Tagging count'
+                    type: integer
+                    example: 4711
+                cart_order_id:
+                    description: 'Contains the cart order id of this order if it is a cart order.'
+                    type: integer
+                    example: 12278919
+                order:
+                    description: 'The identifier of an order'
+                    type: string
+                    example: PAC1234567890719
+                date:
+                    description: 'Date of an order (time zone Europe/Berlin)'
+                    type: string
+                    example: '2019-06-03 14:09:14'
+                status:
+                    description: 'Status of the order'
+                    type: integer
+                    example: 5
+                is_marketplace:
+                    description: 'True if marketplace order otherwise false'
+                    type: boolean
+                    example: true
+                positions:
+                    description: 'List of associated positions of the order'
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/OrderPosition'
+                sum:
+                    description: 'The summed up price of all product positions of the given order'
+                    type: object
+                    $ref: '#/components/schemas/Price'
+                total_sum:
+                    description: 'The final price that has to be paid by the retailer (except for any possible `deposit`). This price includes, among other things, the item total (`sum`), costs of the payment method (`payment.method.price`), costs for alternative delivery address (`shipping.delivery_address.price`), shipping costs (`shipping.method.price`) and possible discounts (`shipping.handling_fee`).'
+                    type: object
+                    $ref: '#/components/schemas/Price'
+                deposit:
+                    description: 'Summed up deposit price for the order'
+                    type: object
+                    $ref: '#/components/schemas/Price'
+            type: object
+        ResponseStatus:
+            title: Status
+            required:
+                - id
+                - send_mail
+                - key
+                - name
+                - comment_required
+            properties:
+                id:
+                    description: 'Order status id.'
+                    type: integer
+                    example: 4
+                send_mail:
+                    description: 'Notify flag: Business partner will get email when status changes'
+                    type: boolean
+                    example: false
+                key:
+                    description: 'Generic order status key'
+                    type: string
+                    example: CANCELED_BY_SELLER
+                name:
+                    description: 'Order status name'
+                    type: string
+                    example: 'Cancellation by seller'
+                comment_required:
+                    description: 'Defines whether the status requires a comment on change'
+                    type: boolean
+                    example: true
+            type: object
+        ResponseCommonGetPaymentMethods:
+            title: Method
+            required:
+                - id
+                - name
+            properties:
+                id:
+                    description: 'Internal id of the payment method. This id will be used in other endpoints.'
+                    type: integer
+                    example: 1
+                name:
+                    description: 'The name of the payment method.'
+                    type: string
+                    example: SEPA
+                is_default:
+                    description: 'True if the payment method is the default one. This information is relevant for buyers only.'
+                    type: boolean
+                    example: true
+            type: object
+        ResponseCommonGetShippingCompany:
+            title: Company
+            required:
+                - id
+                - country
+                - name
+            properties:
+                id:
+                    description: 'Internal id of the shipping company. This id will be used in other endpoints.'
+                    type: integer
+                    example: 1
+                country:
+                    description: 'Country code in ISO 3166-1 alpha-2 (lowercase 2-letter country code, e.g. de)'
+                    type: string
+                    example: de
+                name:
+                    description: 'The name of the shipping company'
+                    type: string
+                    example: UPS
+                url:
+                    description: 'URL of the shipping company to track a package. The placeholer ##PACELNUMBER## can be replaced with a given package number for the given shipping company.'
+                    type: string
+                    example: 'https://wwwapps.ups.com/WebTracking/processInputRequest?sort_by=status&tracknums_displayed=1&TypeOfInquiryNumber=T&loc=de_DE&InquiryNumber1=##PARCELNUMBER##'
+            type: object
+        ResponsePing:
+            title: Ping
+            type: string
+        ResponseDocumentData:
+            title: Data
+            required:
+                - id
+                - creation_date
+                - name
+                - content
+            properties:
+                id:
+                    description: 'Id of document'
+                    type: integer
+                    example: 123
+                creation_date:
+                    description: 'Creation date (time zone Europe/Berlin)'
+                    type: string
+                    example: '2019-06-27 09:06:53'
+                name:
+                    description: 'Name of document'
+                    type: string
+                    example: Gewerbeanmeldung
+                reference_number:
+                    description: 'A reference number for the given document'
+                    type: string
+                    example: '123456789098765432'
+                content:
+                    description: 'Base64 encoded content of document'
+                    type: string
+            type: object
+        businessPartner:
+            title: BusinessPartner
+            required:
+                - id
+                - recipient_code
+            properties:
+                contact:
+                    description: 'Contact information'
+                    type: object
+                    $ref: '#/components/schemas/Contact'
+                id:
+                    description: 'Tyre24 id of the customer'
+                    type: integer
+                    example: 2000
+                status_name:
+                    description: 'Status name of the customer'
+                    type: string
+                    example: Premium-Account
+                recipient_code:
+                    description: 'Recipient code (required in italy)'
+                    type: string
+                address:
+                    description: Address
+                    type: object
+                    $ref: '#/components/schemas/Address'
+                tax:
+                    description: 'Tax information'
+                    type: object
+                    $ref: '#/components/schemas/Tax'
+                bank:
+                    description: 'Bank account information'
+                    type: object
+                    $ref: '#/components/schemas/Bank'
+                credit_reform:
+                    description: 'Credit reform information'
+                    type: object
+                    $ref: '#/components/schemas/CreditReform'
+                cooperation:
+                    description: 'Information about cooperation'
+                    type: object
+                    $ref: '#/components/schemas/Organisation'
+            type: object
+        ChildBranch:
+            title: ChildBranch
+            required:
+                - child_branch_order
+                - filiale
+            properties:
+                child_branch_order:
+                    description: 'True if the order was placed by a child branch of the user, otherwise false'
+                    type: boolean
+                    example: true
+                filiale:
+                    description: 'Filiale information of the child branch that placed the order'
+                    type: object
+                    $ref: '#/components/schemas/businessPartner'
+            type: object
+        Currency:
+            title: Currency
+            required:
+                - code_origin
+                - code_converted
+                - factor
+            properties:
+                code_origin:
+                    description: 'Currency code of the origin price'
+                    type: string
+                    example: EUR
+                code_converted:
+                    description: 'Currency code of the converted price'
+                    type: string
+                    example: PLN
+                factor:
+                    description: 'The factor to convert prices from origin to converted currency'
+                    type: number
+                    example: 4.29
+            type: object
+        Shipping:
+            title: Shipping
+            required:
+                - delivery_date
+                - priority
+                - neutral
+                - handling_fee
+                - delivery_address
+                - method
+                - tracking
+            properties:
+                deliveryDate:
+                    description: 'Estimated delivery date'
+                    type: string
+                    example: '2019-06-03'
+                priority:
+                    description: 'True if shipping has priority, otherwise false'
+                    type: boolean
+                    example: true
+                neutral:
+                    description: 'True if neutral shipping was selected, otherwise false'
+                    type: boolean
+                    example: true
+                handling_fee:
+                    description: 'Any discounts that may apply to the order.'
+                    type: object
+                    $ref: '#/components/schemas/Price'
+                delivery_address:
+                    description: 'Delivery address'
+                    type: object
+                    $ref: '#/components/schemas/DeliveryAddress'
+                method:
+                    description: 'Shipping method information'
+                    type: object
+                    $ref: '#/components/schemas/ShippingMethod'
+                tracking:
+                    description: 'A list of tracking numbers'
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/TrackingNumber'
+            type: object
+        Assurance:
+            title: Assurance
+            required:
+                - id
+                - status
+                - latest_date
+                - name
+                - url
+            properties:
+                id:
+                    description: 'Insurance id'
+                    type: integer
+                    example: 1
+                status:
+                    description: 'Insurance status 0-2'
+                    type: integer
+                    example: 1
+                latest_date:
+                    description: 'The latest date where you can still make an insurance (time zone Europe/Berlin)'
+                    type: string
+                    example: '2019-09-03 11:49:26'
+                name:
+                    description: 'Name of the insurance'
+                    type: string
+                    example: 'TCS Reifenversicherung (2 Jahre)*'
+                url:
+                    description: 'Url for insurance pdf or insurance formular'
+                    type: string
+                    example: 'https://tyre24.alzura.zf/de/de/user/assurancedata/assuranceID/1/tyreID/352046/amount/4/orderID/22518820619'
+            type: object
+        Payment:
+            title: Payment
+            required:
+                - method
+                - price_additional
+            properties:
+                method:
+                    description: 'Contains information about the payment method'
+                    type: object
+                    $ref: '#/components/schemas/Method'
+                price_additional:
+                    description: 'Additional fees for payment (e.g. paypal service fee)'
+                    type: object
+                    $ref: '#/components/schemas/Price'
+            type: object
+        Invoice:
+            title: Invoice
+            required:
+                - has_invoice
+                - has_refund
+                - number
+                - sum
+            properties:
+                has_invoice:
+                    description: 'True if order has an invoice, otherwise false'
+                    type: boolean
+                    example: true
+                has_refund:
+                    description: 'True if order has a refund, otherwise false'
+                    type: boolean
+                    example: true
+                number:
+                    description: 'Invoice number'
+                    type: string
+                    example: '12345'
+                sum:
+                    description: 'The total sum of the invoice'
+                    type: number
+                    example: 12.99
+            type: object
+        Message:
+            title: Message
+            required:
+                - id
+                - from
+                - to
+                - subject
+                - text
+                - date
+                - status
+                - has_file
+            properties:
+                id:
+                    description: 'The id of the message'
+                    type: integer
+                    example: 254654
+                from:
+                    description: 'Customer id from whom the messages was send'
+                    type: string
+                    example: '2000'
+                to:
+                    description: 'Customer id of the recipient'
+                    type: string
+                    example: '2112'
+                subject:
+                    description: 'The message subject'
+                    type: string
+                    example: Pink
+                text:
+                    description: 'The message text itself'
+                    type: string
+                    example: "Hi, I'd like the alloy in pink not black."
+                date:
+                    description: 'Message date (time zone Europe/Berlin)'
+                    type: string
+                    example: '2020-01-01 00:00:01'
+                status:
+                    description: "The status of the message (can be 'new' or 'open')"
+                    type: string
+                    example: new
+                has_file:
+                    description: 'Indicates if the message has a file'
+                    type: boolean
+                    example: true
+                author:
+                    description: 'Stores the Name of the author who creates a message'
+                    type: string
+                    example: '1'
+            type: object
+        Document:
+            title: Document
+            required:
+                - id
+                - type
+                - endpoint
+            properties:
+                id:
+                    description: 'Id of the document'
+                    type: integer
+                    example: 12345
+                type:
+                    description: 'Document type'
+                    type: string
+                    example: DEBIT_AGREEMENT
+                reference_number:
+                    description: 'Reference number'
+                    type: string
+                    example: '123456789098765432'
+                endpoint:
+                    description: 'Link to download the document via the GET /common/document endpoint'
+                    type: string
+                    example: 'https://api-b2b.alzura.com/common/document?type=DEBIT_AGREEMENT&filter[id]=123&order=PAC1234567'
+            type: object
+        OrderPosition:
+            title: OrderPosition
+            required:
+                - id
+                - article_type
+                - alzura_id
+                - status
+                - quantity
+                - price
+                - supplier_item_number
+                - position_name
+                - position_description
+            properties:
+                id:
+                    description: 'The position id'
+                    type: integer
+                    example: 1
+                article_type:
+                    description: 'Product type of the position'
+                    type: string
+                    example: PAC
+                alzura_id:
+                    description: 'The internal alzura id of the position article'
+                    type: string
+                    example: '12345'
+                status:
+                    description: 'Status id of the position'
+                    type: integer
+                    example: 2
+                can_be_cancelled:
+                    description: 'Describes if the order can be cancelled. This field will only be in the response, if authenticated as a retailer.'
+                    type: boolean
+                    example: true
+                quantity:
+                    description: 'Quantity of the position'
+                    type: integer
+                    example: 4
+                attributes:
+                    description: 'List of associated attributes'
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Attribute'
+                price:
+                    description: 'The unit price of the position'
+                    type: object
+                    $ref: '#/components/schemas/PositionPrice'
+                supplier_item_number:
+                    description: 'Supplier item number of the article'
+                    type: string
+                    example: nf3r784gr
+                position_name:
+                    description: 'The name of the article'
+                    type: string
+                    example: 'Radschraube Kugelbund R12 M14 x 1,5 x 27'
+                position_description:
+                    description: 'Additional description for the position'
+                    type: string
+                    example: 'XTRA WHEELS'
+                check_options:
+                    description: 'List of check options of the position'
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/CheckOption'
+            type: object
+        Price:
+            title: Price
+            required:
+                - net
+                - net_converted
+            properties:
+                vat:
+                    description: 'Contains the value-added tax (VAT) the price has been calculated with'
+                    type: number
+                    example: 0.19
+                net:
+                    description: 'Contains the net value of the price'
+                    type: number
+                    example: 58.36
+                net_converted:
+                    description: 'Contains the net value of the price converted to the given currency'
+                    type: number
+                    example: 58.36
+                gross:
+                    description: 'Contains the gross value of the net value'
+                    type: number
+                    example: 69.45
+                gross_converted:
+                    description: 'Contains the gross value of the net converted value to the given currency'
+                    type: number
+                    example: 69.45
+            type: object
+        businessPartnerLatest:
+            title: BusinessPartnerLatest
+            required:
+                - id
+                - recipient_code
+            properties:
+                contact:
+                    description: 'Contact information'
+                    type: object
+                    $ref: '#/components/schemas/ContactLatest'
+                id:
+                    description: 'Tyre24 id of the customer'
+                    type: integer
+                    example: 2000
+                status_name:
+                    description: 'Status name of the customer'
+                    type: string
+                    example: Premium-Account
+                recipient_code:
+                    description: 'Recipient code (required in italy)'
+                    type: string
+                address:
+                    description: Address
+                    type: object
+                    $ref: '#/components/schemas/Address'
+                tax:
+                    description: 'Tax information'
+                    type: object
+                    $ref: '#/components/schemas/Tax'
+                bank:
+                    description: 'Bank account information'
+                    type: object
+                    $ref: '#/components/schemas/Bank'
+                credit_reform:
+                    description: 'Credit reform information'
+                    type: object
+                    $ref: '#/components/schemas/CreditReform'
+                cooperation:
+                    description: 'Information about cooperation'
+                    type: object
+                    $ref: '#/components/schemas/Organisation'
+            type: object
+        Contact:
+            title: Contact
+            properties:
+                name:
+                    description: 'Full name'
+                    type: string
+                    example: 'Max Musterman'
+                email:
+                    description: Email
+                    type: string
+                    example: max.musterman@saitow.ag
+                phone:
+                    description: Phone
+                    type: string
+                    example: '+49 6301 600 1000'
+                fax:
+                    description: Fax
+                    type: string
+                    example: '+49 6301 600 1000'
+            type: object
+        Address:
+            title: Address
+            required:
+                - name
+                - name_additional
+                - street
+                - city
+                - zip
+                - country
+            properties:
+                name:
+                    description: 'Full name of the recipient'
+                    type: string
+                    example: 'Max Musterman'
+                name_additional:
+                    description: 'Name additional'
+                    type: string
+                    example: 'car dealership'
+                street:
+                    description: Street
+                    type: string
+                    example: 'Main Street 5'
+                city:
+                    description: City
+                    type: string
+                    example: Musterstadt
+                zip:
+                    description: 'Zip code'
+                    type: string
+                    example: '67661'
+                country:
+                    description: Country
+                    type: string
+                    example: Germany
+            type: object
+        Tax:
+            title: Tax
+            properties:
+                tax_number:
+                    description: 'Tax number'
+                    type: string
+                    example: '01738270790'
+                sales_tax_identification_number:
+                    description: 'Sales tax identification number'
+                    type: string
+                    example: DE224514584
+            type: object
+        Bank:
+            title: Bank
+            required:
+                - bank
+                - owner
+                - iban
+                - bic_swift
+            properties:
+                bank:
+                    description: 'Bank name'
+                    type: string
+                    example: Volkskasse
+                owner:
+                    description: 'Bank account owner'
+                    type: string
+                    example: 'Max Mustermann'
+                iban:
+                    description: Iban
+                    type: string
+                    example: 'DE99 9999 9999 9999 9999 99'
+                bic_swift:
+                    description: Bic/swift
+                    type: string
+                    example: MALADE51DKH
+                last_change_date:
+                    description: 'If given, the date when the bank date has been changed for the last time'
+                    type: string
+                    example: '2023-01-02'
+                recently_changed:
+                    description: 'True if the bank data has changed within the last 30 days, otherwise false'
+                    type: boolean
+                    example: true
+            type: object
+        CreditReform:
+            title: CreditReform
+            required:
+                - index
+                - limit
+                - text
+                - check_date
+            properties:
+                index:
+                    description: 'Risk group'
+                    type: string
+                    example: '2'
+                limit:
+                    description: Limit
+                    type: string
+                    example: '15000'
+                text:
+                    description: 'Additional text'
+                    type: string
+                    example: 'Attention the address was changed'
+                check_date:
+                    description: 'Date RFC3339 https://xml2rfc.tools.ietf.org/public/rfc/html/rfc3339.html#anchor14'
+                    type: string
+                    example: '2019-08-08'
+            type: object
+        Organisation:
+            title: Cooperation
+            required:
+                - number
+                - name
+            properties:
+                number:
+                    description: 'Number of the cooperation'
+                    type: string
+                    example: '2'
+                name:
+                    description: 'Name of the cooperation'
+                    type: string
+                    example: KAGUMA
+            type: object
+        DeliveryAddress:
+            title: DeliveryAddress
+            required:
+                - use_alternative_address
+            properties:
+                use_alternative_address:
+                    description: 'True if alternative delivery address is used, otherwise false'
+                    type: boolean
+                    example: false
+                address:
+                    description: 'Delivery address'
+                    type: object
+                    $ref: '#/components/schemas/Address'
+                contact:
+                    description: 'Contact of the recipient'
+                    type: object
+                    $ref: '#/components/schemas/Contact'
+                price:
+                    description: 'Additional costs for delivery address'
+                    type: object
+                    $ref: '#/components/schemas/Price'
+            type: object
+        ShippingMethod:
+            title: ShippingMethod
+            required:
+                - id
+                - name
+                - price
+            properties:
+                id:
+                    description: 'Id of the shipping method'
+                    type: integer
+                    example: 5
+                name:
+                    description: 'Name of the shipping method'
+                    type: string
+                    example: 'Express today (truck)'
+                price:
+                    description: 'Shipping costs'
+                    type: object
+                    $ref: '#/components/schemas/Price'
+            type: object
+        TrackingNumber:
+            title: TrackingNumber
+            required:
+                - service_id
+                - service
+                - number
+                - url
+            properties:
+                service_id:
+                    description: 'Shipping service id'
+                    type: integer
+                    example: 1
+                service:
+                    description: 'Shipping service name'
+                    type: string
+                    example: DHL
+                number:
+                    description: 'Tracking number'
+                    type: string
+                    example: '506129509800'
+                url:
+                    description: 'Tracking url'
+                    type: string
+                    example: 'http://www.dhl-tracking.example/506129509800'
+            type: object
+        Method:
+            title: Method
+            required:
+                - id
+                - name
+                - text
+                - price
+            properties:
+                id:
+                    description: 'The unique id of the method'
+                    type: integer
+                    example: 5
+                name:
+                    description: 'The name of the method'
+                    type: string
+                    example: SEPA
+                text:
+                    description: 'Additional description specifying the method'
+                    type: string
+                    example: 'additional description'
+                price:
+                    description: 'The costs of this method (e.g. payment method surname fee)'
+                    type: object
+                    $ref: '#/components/schemas/Price'
+            type: object
+        Attribute:
+            title: Attribute
+            required:
+                - key
+                - value
+                - generic_key
+            properties:
+                key:
+                    description: 'The key contains the translation of the generic_key in the requested accept-language, as specified in the header.'
+                    type: string
+                    example: Hersteller
+                value:
+                    description: 'Contains the value of the attribute'
+                    type: string
+                    example: '5452000470454'
+                generic_key:
+                    description: 'This generic_key is a unique identifier of this attribute. It is independent of the requested accept-language.'
+                    type: string
+                    example: manufacturer
+            type: object
+        PositionPrice:
+            title: PositionPrice
+            required:
+                - net
+                - net_converted
+            properties:
+                net_original:
+                    description: 'Contains the original imported net value of the price (will only be displayed for sellers)'
+                    type: number
+                    example: 58.36
+                vat:
+                    description: 'Contains the value-added tax (VAT) the price has been calculated with'
+                    type: number
+                    example: 0.19
+                net:
+                    description: 'Contains the net value of the price'
+                    type: number
+                    example: 58.36
+                net_converted:
+                    description: 'Contains the net value of the price converted to the given currency'
+                    type: number
+                    example: 58.36
+                gross:
+                    description: 'Contains the gross value of the net value'
+                    type: number
+                    example: 69.45
+                gross_converted:
+                    description: 'Contains the gross value of the net converted value to the given currency'
+                    type: number
+                    example: 69.45
+            type: object
+        CheckOption:
+            title: CheckOption
+            required:
+                - key
+                - value
+            properties:
+                key:
+                    description: 'Contains the name of the check option'
+                    type: string
+                    example: Performance
+                value:
+                    description: 'Contains the value of the check option'
+                    type: string
+                    example: 302KW
+            type: object
+        ContactLatest:
+            title: ContactLatest
+            properties:
+                email:
+                    description: 'Link to the contact page.'
+                    type: string
+                    example: 'https://tyre24.alzura.com/de/de/user/historySendMessage/...'
+                name:
+                    description: 'Full name'
+                    type: string
+                    example: 'Max Musterman'
+                phone:
+                    description: Phone
+                    type: string
+                    example: '+49 6301 600 1000'
+                fax:
+                    description: Fax
+                    type: string
+                    example: '+49 6301 600 1000'
+            type: object
+    securitySchemes:
+        API-Key:
+            type: apiKey
+            description: |-
+                You gain access to administrative endpoints by using an API key. This authentication is for internal usage.
+                ### Examples of an authentication error
+
+                The `HTTP status code` in case of an authentication error will be `401 Unauthorized` and the following response will be returned.
+                ```json
+                {
+                  "data": {
+                       "error": "ERR_AUTHENTICATION_FAILURE"
+                  }
+                }
+                ```
+
+                If a user tries to call an endpoint, for which he/she does have the required role, the following response, with `HTTP status code` `401 Unauthorized`, will be returned.
+                ```json
+                {
+                  ""data"": [
+                      {
+                          "error_code": "ERR_AUTHENTICATION_FORBIDDEN",
+                          "error_message": "You do not have access to this endpoint."
+                      }
+                  ]
+                }
+                ```
+            name: X-API-KEY
+            in: header
+        basicAuth:
+            type: http
+            description: |-
+                As a retailer or supplier you can use your credentials to gain access to the ```/common/login``` endpoint.
+                ```text
+                Authorization: Basic base64 encoded(customer-id:password)
+                ```
+                ### Example of an authentication error
+                The `HTTP status code` in case of an authentication error will be `401 Unauthorized` and the following response will be returned.
+                ```json
+                {
+                 "data": {
+                     "error": "ERR_AUTHENTICATION_FAILURE"
+                 }
+                }
+                ```
+            scheme: basic
+        basicAuthOperator:
+            type: http
+            description: |-
+                Use basic HTTP authentication. As an operator use operator id and password. As a customer use email and password.
+                ```text
+                Authorization: Basic base64 encoded(customer-id:password)
+                ```
+            scheme: basic
+        X-AUTH-TOKEN:
+            type: apiKey
+            description: |-
+                Endpoints that require this authentication must send  `X-AUTH-TOKEN` in header. To get such an X-AUTH-TOKEN see `/common/login` endpoint for further information.
+
+                ```text
+                X-AUTH-TOKEN: some-valid-x-auth-token
+                ```
+
+                ### Examples of an authentication error
+                The `HTTP status code` in case of an authentication error will be `401 Unauthorized` and the following response will be returned.
+                ```json
+                {
+                  "data": {
+                       "error": "ERR_AUTHENTICATION_FAILURE"
+                  }
+                }
+                ```
+
+                If a user tries to call an endpoint, for which he/she does have the required role, the following response, with `HTTP status code` `401 Unauthorized`, will be returned.
+                ```json
+                {
+                  "data": [
+                      {
+                          "error_code": "ERR_AUTHENTICATION_FORBIDDEN",
+                          "error_message": "You do not have access to this endpoint."
+                      }
+                  ]
+                }
+                ```
+            name: X-AUTH-TOKEN
+            in: header
+        X-AUTH-TOKEN-OPERATOR:
+            type: apiKey
+            description: |-
+                Endpoints that require this authentication must send  `X-AUTH-TOKEN` in header. To get such an X-AUTH-TOKEN see `/operator/login` endpoint for further information.
+                ```text
+                X-AUTH-TOKEN: some-valid-x-auth-token
+                ```
+
+                ### Examples of an authentication error
+                The `HTTP status code` in case of an authentication error will be `401 Unauthorized` and the following response will be returned.
+                ```json
+                {
+                  "data": {
+                    "error": "ERR_AUTHENTICATION_FAILURE"
+                  }
+                }
+                ```
+
+                If a user tries to call an endpoint, for which he/she does have the required role, the following response, with `HTTP status code` `401 Unauthorized`, will be returned.
+                ```json
+                {
+                  "data": [
+                      {
+                          "error_code": "ERR_AUTHENTICATION_FORBIDDEN",
+                          "error_message": "You do not have access to this endpoint."
+                      }
+                  ]
+                }
+                ```
+            name: X-AUTH-TOKEN
+            in: header
+        OAuthAccessToken:
+            type: http
+            description: 'The authentication is done by providing a json web token which represents an OAuth Access token provided by the alzura-oauth server.'
+            bearerFormat: JWT
+            scheme: bearer
+tags:
+    -
+        name: articles
+        description: ''
+    -
+        name: documents
+        description: ''
+    -
+        name: authentication
+        description: ''
+    -
+        name: orders
+        description: ''
+    -
+        name: shipping
+        description: ''
+    -
+        name: messages
+        description: ''
+    -
+        name: ping
+        description: ''
+x-tagGroups:
+    -
+        name: common
+        tags:
+            - messages
+            - articles
+            - authentication
+            - documents
+            - orders
+            - shipping
+            - payments
+            - ping
