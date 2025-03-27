@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PaymentsApi
  * PHP version 8.1
@@ -138,8 +139,7 @@ class PaymentsApi
     public function getPaymentMethodsForAuthenticatedUser(
         string $country,
         string $contentType = self::contentTypes['getPaymentMethodsForAuthenticatedUser'][0]
-    ): \Tyre24\Common\Model\GetPaymentMethodsForAuthenticatedUser200Response|\Tyre24\Common\Model\GetAvailableArticleTypesList400Response|\Tyre24\Common\Model\GetAvailableArticleTypesList401Response
-    {
+    ): \Tyre24\Common\Model\GetPaymentMethodsForAuthenticatedUser200Response|\Tyre24\Common\Model\GetAvailableArticleTypesList400Response|\Tyre24\Common\Model\GetAvailableArticleTypesList401Response {
         list($response) = $this->getPaymentMethodsForAuthenticatedUserWithHttpInfo($country, $contentType);
         return $response;
     }
@@ -159,8 +159,7 @@ class PaymentsApi
     public function getPaymentMethodsForAuthenticatedUserWithHttpInfo(
         string $country,
         string $contentType = self::contentTypes['getPaymentMethodsForAuthenticatedUser'][0]
-    ): array
-    {
+    ): array {
         $request = $this->getPaymentMethodsForAuthenticatedUserRequest($country, $contentType);
 
         try {
@@ -186,9 +185,9 @@ class PaymentsApi
             $statusCode = $response->getStatusCode();
 
 
-            switch($statusCode) {
+            switch ($statusCode) {
                 case 200:
-                    if (in_array('\Tyre24\Common\Model\GetPaymentMethodsForAuthenticatedUser200Response', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Tyre24\Common\Model\GetPaymentMethodsForAuthenticatedUser200Response', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -215,7 +214,7 @@ class PaymentsApi
                         $response->getHeaders()
                     ];
                 case 400:
-                    if (in_array('\Tyre24\Common\Model\GetAvailableArticleTypesList400Response', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Tyre24\Common\Model\GetAvailableArticleTypesList400Response', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -242,7 +241,7 @@ class PaymentsApi
                         $response->getHeaders()
                     ];
                 case 401:
-                    if (in_array('\Tyre24\Common\Model\GetAvailableArticleTypesList401Response', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Tyre24\Common\Model\GetAvailableArticleTypesList401Response', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -284,7 +283,7 @@ class PaymentsApi
             }
 
             $returnType = '\Tyre24\Common\Model\GetPaymentMethodsForAuthenticatedUser200Response';
-            if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+            if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                 $content = $response->getBody(); //stream goes to serializer
             } else {
                 $content = (string) $response->getBody();
@@ -356,8 +355,7 @@ class PaymentsApi
     public function getPaymentMethodsForAuthenticatedUserAsync(
         string $country,
         string $contentType = self::contentTypes['getPaymentMethodsForAuthenticatedUser'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         return $this->getPaymentMethodsForAuthenticatedUserAsyncWithHttpInfo($country, $contentType)
             ->then(
                 function ($response) {
@@ -380,8 +378,7 @@ class PaymentsApi
     public function getPaymentMethodsForAuthenticatedUserAsyncWithHttpInfo(
         string $country,
         string $contentType = self::contentTypes['getPaymentMethodsForAuthenticatedUser'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         $returnType = '\Tyre24\Common\Model\GetPaymentMethodsForAuthenticatedUser200Response';
         $request = $this->getPaymentMethodsForAuthenticatedUserRequest($country, $contentType);
 
@@ -389,7 +386,7 @@ class PaymentsApi
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
                 function ($response) use ($returnType) {
-                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -433,8 +430,7 @@ class PaymentsApi
     public function getPaymentMethodsForAuthenticatedUserRequest(
         string $country,
         string $contentType = self::contentTypes['getPaymentMethodsForAuthenticatedUser'][0]
-    ): Request
-    {
+    ): Request {
 
         // verify the required parameter 'country' is set
         if ($country === null || (is_array($country) && count($country) === 0)) {

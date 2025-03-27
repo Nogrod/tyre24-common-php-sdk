@@ -1,4 +1,5 @@
 <?php
+
 /**
  * OrdersApi
  * PHP version 8.1
@@ -146,8 +147,7 @@ class OrdersApi
         ?array $filter = null,
         ?string $accept_language = null,
         string $contentType = self::contentTypes['getAvailableOrderStatusesList'][0]
-    ): \Tyre24\Common\Model\GetAvailableOrderStatusesList200Response|\Tyre24\Common\Model\GetAvailableArticleTypesList401Response
-    {
+    ): \Tyre24\Common\Model\GetAvailableOrderStatusesList200Response|\Tyre24\Common\Model\GetAvailableArticleTypesList401Response {
         list($response) = $this->getAvailableOrderStatusesListWithHttpInfo($filter, $accept_language, $contentType);
         return $response;
     }
@@ -169,8 +169,7 @@ class OrdersApi
         ?array $filter = null,
         ?string $accept_language = null,
         string $contentType = self::contentTypes['getAvailableOrderStatusesList'][0]
-    ): array
-    {
+    ): array {
         $request = $this->getAvailableOrderStatusesListRequest($filter, $accept_language, $contentType);
 
         try {
@@ -196,9 +195,9 @@ class OrdersApi
             $statusCode = $response->getStatusCode();
 
 
-            switch($statusCode) {
+            switch ($statusCode) {
                 case 200:
-                    if (in_array('\Tyre24\Common\Model\GetAvailableOrderStatusesList200Response', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Tyre24\Common\Model\GetAvailableOrderStatusesList200Response', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -225,7 +224,7 @@ class OrdersApi
                         $response->getHeaders()
                     ];
                 case 401:
-                    if (in_array('\Tyre24\Common\Model\GetAvailableArticleTypesList401Response', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Tyre24\Common\Model\GetAvailableArticleTypesList401Response', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -267,7 +266,7 @@ class OrdersApi
             }
 
             $returnType = '\Tyre24\Common\Model\GetAvailableOrderStatusesList200Response';
-            if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+            if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                 $content = $response->getBody(); //stream goes to serializer
             } else {
                 $content = (string) $response->getBody();
@@ -333,8 +332,7 @@ class OrdersApi
         ?array $filter = null,
         ?string $accept_language = null,
         string $contentType = self::contentTypes['getAvailableOrderStatusesList'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         return $this->getAvailableOrderStatusesListAsyncWithHttpInfo($filter, $accept_language, $contentType)
             ->then(
                 function ($response) {
@@ -359,8 +357,7 @@ class OrdersApi
         ?array $filter = null,
         ?string $accept_language = null,
         string $contentType = self::contentTypes['getAvailableOrderStatusesList'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         $returnType = '\Tyre24\Common\Model\GetAvailableOrderStatusesList200Response';
         $request = $this->getAvailableOrderStatusesListRequest($filter, $accept_language, $contentType);
 
@@ -368,7 +365,7 @@ class OrdersApi
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
                 function ($response) use ($returnType) {
-                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -414,8 +411,7 @@ class OrdersApi
         ?array $filter = null,
         ?string $accept_language = null,
         string $contentType = self::contentTypes['getAvailableOrderStatusesList'][0]
-    ): Request
-    {
+    ): Request {
 
 
 
@@ -531,8 +527,7 @@ class OrdersApi
         ?string $order_role = null,
         ?bool $demo = null,
         string $contentType = self::contentTypes['getLatestOrders'][0]
-    ): \Tyre24\Common\Model\GetLatestOrders200Response|\Tyre24\Common\Model\GetAvailableArticleTypesList400Response|\Tyre24\Common\Model\GetAvailableArticleTypesList401Response
-    {
+    ): \Tyre24\Common\Model\GetLatestOrders200Response|\Tyre24\Common\Model\GetAvailableArticleTypesList400Response|\Tyre24\Common\Model\GetAvailableArticleTypesList401Response {
         list($response) = $this->getLatestOrdersWithHttpInfo($country, $counter, $no_tagging, $tracking_number, $order_role, $demo, $contentType);
         return $response;
     }
@@ -562,8 +557,7 @@ class OrdersApi
         ?string $order_role = null,
         ?bool $demo = null,
         string $contentType = self::contentTypes['getLatestOrders'][0]
-    ): array
-    {
+    ): array {
         $request = $this->getLatestOrdersRequest($country, $counter, $no_tagging, $tracking_number, $order_role, $demo, $contentType);
 
         try {
@@ -589,9 +583,9 @@ class OrdersApi
             $statusCode = $response->getStatusCode();
 
 
-            switch($statusCode) {
+            switch ($statusCode) {
                 case 200:
-                    if (in_array('\Tyre24\Common\Model\GetLatestOrders200Response', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Tyre24\Common\Model\GetLatestOrders200Response', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -618,7 +612,7 @@ class OrdersApi
                         $response->getHeaders()
                     ];
                 case 400:
-                    if (in_array('\Tyre24\Common\Model\GetAvailableArticleTypesList400Response', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Tyre24\Common\Model\GetAvailableArticleTypesList400Response', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -645,7 +639,7 @@ class OrdersApi
                         $response->getHeaders()
                     ];
                 case 429:
-                    if (in_array('\Tyre24\Common\Model\GetAvailableArticleTypesList400Response', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Tyre24\Common\Model\GetAvailableArticleTypesList400Response', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -672,7 +666,7 @@ class OrdersApi
                         $response->getHeaders()
                     ];
                 case 401:
-                    if (in_array('\Tyre24\Common\Model\GetAvailableArticleTypesList401Response', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Tyre24\Common\Model\GetAvailableArticleTypesList401Response', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -714,7 +708,7 @@ class OrdersApi
             }
 
             $returnType = '\Tyre24\Common\Model\GetLatestOrders200Response';
-            if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+            if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                 $content = $response->getBody(); //stream goes to serializer
             } else {
                 $content = (string) $response->getBody();
@@ -804,8 +798,7 @@ class OrdersApi
         ?string $order_role = null,
         ?bool $demo = null,
         string $contentType = self::contentTypes['getLatestOrders'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         return $this->getLatestOrdersAsyncWithHttpInfo($country, $counter, $no_tagging, $tracking_number, $order_role, $demo, $contentType)
             ->then(
                 function ($response) {
@@ -838,8 +831,7 @@ class OrdersApi
         ?string $order_role = null,
         ?bool $demo = null,
         string $contentType = self::contentTypes['getLatestOrders'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         $returnType = '\Tyre24\Common\Model\GetLatestOrders200Response';
         $request = $this->getLatestOrdersRequest($country, $counter, $no_tagging, $tracking_number, $order_role, $demo, $contentType);
 
@@ -847,7 +839,7 @@ class OrdersApi
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
                 function ($response) use ($returnType) {
-                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -901,8 +893,7 @@ class OrdersApi
         ?string $order_role = null,
         ?bool $demo = null,
         string $contentType = self::contentTypes['getLatestOrders'][0]
-    ): Request
-    {
+    ): Request {
 
         // verify the required parameter 'country' is set
         if ($country === null || (is_array($country) && count($country) === 0)) {
@@ -1056,8 +1047,7 @@ class OrdersApi
         string $country,
         string $order,
         string $contentType = self::contentTypes['getOrderDetailsByOrderId'][0]
-    ): \Tyre24\Common\Model\GetOrderDetailsByOrderId200Response|\Tyre24\Common\Model\GetAvailableArticleTypesList400Response|\Tyre24\Common\Model\GetAvailableArticleTypesList401Response
-    {
+    ): \Tyre24\Common\Model\GetOrderDetailsByOrderId200Response|\Tyre24\Common\Model\GetAvailableArticleTypesList400Response|\Tyre24\Common\Model\GetAvailableArticleTypesList401Response {
         list($response) = $this->getOrderDetailsByOrderIdWithHttpInfo($country, $order, $contentType);
         return $response;
     }
@@ -1079,8 +1069,7 @@ class OrdersApi
         string $country,
         string $order,
         string $contentType = self::contentTypes['getOrderDetailsByOrderId'][0]
-    ): array
-    {
+    ): array {
         $request = $this->getOrderDetailsByOrderIdRequest($country, $order, $contentType);
 
         try {
@@ -1106,9 +1095,9 @@ class OrdersApi
             $statusCode = $response->getStatusCode();
 
 
-            switch($statusCode) {
+            switch ($statusCode) {
                 case 200:
-                    if (in_array('\Tyre24\Common\Model\GetOrderDetailsByOrderId200Response', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Tyre24\Common\Model\GetOrderDetailsByOrderId200Response', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -1135,7 +1124,7 @@ class OrdersApi
                         $response->getHeaders()
                     ];
                 case 400:
-                    if (in_array('\Tyre24\Common\Model\GetAvailableArticleTypesList400Response', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Tyre24\Common\Model\GetAvailableArticleTypesList400Response', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -1162,7 +1151,7 @@ class OrdersApi
                         $response->getHeaders()
                     ];
                 case 401:
-                    if (in_array('\Tyre24\Common\Model\GetAvailableArticleTypesList401Response', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Tyre24\Common\Model\GetAvailableArticleTypesList401Response', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -1204,7 +1193,7 @@ class OrdersApi
             }
 
             $returnType = '\Tyre24\Common\Model\GetOrderDetailsByOrderId200Response';
-            if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+            if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                 $content = $response->getBody(); //stream goes to serializer
             } else {
                 $content = (string) $response->getBody();
@@ -1278,8 +1267,7 @@ class OrdersApi
         string $country,
         string $order,
         string $contentType = self::contentTypes['getOrderDetailsByOrderId'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         return $this->getOrderDetailsByOrderIdAsyncWithHttpInfo($country, $order, $contentType)
             ->then(
                 function ($response) {
@@ -1304,8 +1292,7 @@ class OrdersApi
         string $country,
         string $order,
         string $contentType = self::contentTypes['getOrderDetailsByOrderId'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         $returnType = '\Tyre24\Common\Model\GetOrderDetailsByOrderId200Response';
         $request = $this->getOrderDetailsByOrderIdRequest($country, $order, $contentType);
 
@@ -1313,7 +1300,7 @@ class OrdersApi
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
                 function ($response) use ($returnType) {
-                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -1359,8 +1346,7 @@ class OrdersApi
         string $country,
         string $order,
         string $contentType = self::contentTypes['getOrderDetailsByOrderId'][0]
-    ): Request
-    {
+    ): Request {
 
         // verify the required parameter 'country' is set
         if ($country === null || (is_array($country) && count($country) === 0)) {

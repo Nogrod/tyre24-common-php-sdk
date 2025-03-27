@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MessagesApi
  * PHP version 8.1
@@ -140,8 +141,7 @@ class MessagesApi
         ?string $content_type = null,
         ?\Tyre24\Common\Model\MessageIds $message_ids = null,
         string $contentType = self::contentTypes['markMessagesReadByMessageIds'][0]
-    ): \Tyre24\Common\Model\GetAvailableArticleTypesList400Response|\Tyre24\Common\Model\GetAvailableArticleTypesList401Response
-    {
+    ): \Tyre24\Common\Model\GetAvailableArticleTypesList400Response|\Tyre24\Common\Model\GetAvailableArticleTypesList401Response {
         $this->markMessagesReadByMessageIdsWithHttpInfo($content_type, $message_ids, $contentType);
     }
 
@@ -162,8 +162,7 @@ class MessagesApi
         ?string $content_type = null,
         ?\Tyre24\Common\Model\MessageIds $message_ids = null,
         string $contentType = self::contentTypes['markMessagesReadByMessageIds'][0]
-    ): array
-    {
+    ): array {
         $request = $this->markMessagesReadByMessageIdsRequest($content_type, $message_ids, $contentType);
 
         try {
@@ -230,8 +229,7 @@ class MessagesApi
         ?string $content_type = null,
         ?\Tyre24\Common\Model\MessageIds $message_ids = null,
         string $contentType = self::contentTypes['markMessagesReadByMessageIds'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         return $this->markMessagesReadByMessageIdsAsyncWithHttpInfo($content_type, $message_ids, $contentType)
             ->then(
                 function ($response) {
@@ -256,8 +254,7 @@ class MessagesApi
         ?string $content_type = null,
         ?\Tyre24\Common\Model\MessageIds $message_ids = null,
         string $contentType = self::contentTypes['markMessagesReadByMessageIds'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         $returnType = '';
         $request = $this->markMessagesReadByMessageIdsRequest($content_type, $message_ids, $contentType);
 
@@ -298,8 +295,7 @@ class MessagesApi
         ?string $content_type = null,
         ?\Tyre24\Common\Model\MessageIds $message_ids = null,
         string $contentType = self::contentTypes['markMessagesReadByMessageIds'][0]
-    ): Request
-    {
+    ): Request {
 
 
 

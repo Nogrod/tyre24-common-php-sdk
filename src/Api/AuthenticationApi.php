@@ -1,4 +1,5 @@
 <?php
+
 /**
  * AuthenticationApi
  * PHP version 8.1
@@ -136,8 +137,7 @@ class AuthenticationApi
      */
     public function loginUser(
         string $contentType = self::contentTypes['loginUser'][0]
-    ): \Tyre24\Common\Model\LoginUser200Response|\Tyre24\Common\Model\LoginUser401Response
-    {
+    ): \Tyre24\Common\Model\LoginUser200Response|\Tyre24\Common\Model\LoginUser401Response {
         list($response) = $this->loginUserWithHttpInfo($contentType);
         return $response;
     }
@@ -155,8 +155,7 @@ class AuthenticationApi
      */
     public function loginUserWithHttpInfo(
         string $contentType = self::contentTypes['loginUser'][0]
-    ): array
-    {
+    ): array {
         $request = $this->loginUserRequest($contentType);
 
         try {
@@ -182,9 +181,9 @@ class AuthenticationApi
             $statusCode = $response->getStatusCode();
 
 
-            switch($statusCode) {
+            switch ($statusCode) {
                 case 200:
-                    if (in_array('\Tyre24\Common\Model\LoginUser200Response', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Tyre24\Common\Model\LoginUser200Response', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -211,7 +210,7 @@ class AuthenticationApi
                         $response->getHeaders()
                     ];
                 case 401:
-                    if (in_array('\Tyre24\Common\Model\LoginUser401Response', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Tyre24\Common\Model\LoginUser401Response', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -253,7 +252,7 @@ class AuthenticationApi
             }
 
             $returnType = '\Tyre24\Common\Model\LoginUser200Response';
-            if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+            if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                 $content = $response->getBody(); //stream goes to serializer
             } else {
                 $content = (string) $response->getBody();
@@ -315,8 +314,7 @@ class AuthenticationApi
      */
     public function loginUserAsync(
         string $contentType = self::contentTypes['loginUser'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         return $this->loginUserAsyncWithHttpInfo($contentType)
             ->then(
                 function ($response) {
@@ -337,8 +335,7 @@ class AuthenticationApi
      */
     public function loginUserAsyncWithHttpInfo(
         string $contentType = self::contentTypes['loginUser'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         $returnType = '\Tyre24\Common\Model\LoginUser200Response';
         $request = $this->loginUserRequest($contentType);
 
@@ -346,7 +343,7 @@ class AuthenticationApi
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
                 function ($response) use ($returnType) {
-                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -388,8 +385,7 @@ class AuthenticationApi
      */
     public function loginUserRequest(
         string $contentType = self::contentTypes['loginUser'][0]
-    ): Request
-    {
+    ): Request {
 
 
         $resourcePath = '/common/login';

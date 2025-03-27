@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PingApi
  * PHP version 8.1
@@ -136,8 +137,7 @@ class PingApi
      */
     public function ping(
         string $contentType = self::contentTypes['ping'][0]
-    ): \Tyre24\Common\Model\Ping200Response
-    {
+    ): \Tyre24\Common\Model\Ping200Response {
         list($response) = $this->pingWithHttpInfo($contentType);
         return $response;
     }
@@ -155,8 +155,7 @@ class PingApi
      */
     public function pingWithHttpInfo(
         string $contentType = self::contentTypes['ping'][0]
-    ): array
-    {
+    ): array {
         $request = $this->pingRequest($contentType);
 
         try {
@@ -182,9 +181,9 @@ class PingApi
             $statusCode = $response->getStatusCode();
 
 
-            switch($statusCode) {
+            switch ($statusCode) {
                 case 200:
-                    if (in_array('\Tyre24\Common\Model\Ping200Response', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Tyre24\Common\Model\Ping200Response', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -226,7 +225,7 @@ class PingApi
             }
 
             $returnType = '\Tyre24\Common\Model\Ping200Response';
-            if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+            if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                 $content = $response->getBody(); //stream goes to serializer
             } else {
                 $content = (string) $response->getBody();
@@ -280,8 +279,7 @@ class PingApi
      */
     public function pingAsync(
         string $contentType = self::contentTypes['ping'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         return $this->pingAsyncWithHttpInfo($contentType)
             ->then(
                 function ($response) {
@@ -302,8 +300,7 @@ class PingApi
      */
     public function pingAsyncWithHttpInfo(
         string $contentType = self::contentTypes['ping'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         $returnType = '\Tyre24\Common\Model\Ping200Response';
         $request = $this->pingRequest($contentType);
 
@@ -311,7 +308,7 @@ class PingApi
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
                 function ($response) use ($returnType) {
-                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -353,8 +350,7 @@ class PingApi
      */
     public function pingRequest(
         string $contentType = self::contentTypes['ping'][0]
-    ): Request
-    {
+    ): Request {
 
 
         $resourcePath = '/ping';

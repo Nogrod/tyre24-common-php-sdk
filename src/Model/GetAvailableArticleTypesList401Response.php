@@ -1,4 +1,5 @@
 <?php
+
 /**
  * GetAvailableArticleTypesList401Response
  *
@@ -378,7 +379,7 @@ class GetAvailableArticleTypesList401Response implements ModelInterface, ArrayAc
     #[ReturnTypeWillChange]
     public function jsonSerialize(): mixed
     {
-       return ObjectSerializer::sanitizeForSerialization($this);
+        return ObjectSerializer::sanitizeForSerialization($this);
     }
 
     /**

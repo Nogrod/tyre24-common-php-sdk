@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ArticlesApi
  * PHP version 8.1
@@ -142,8 +143,7 @@ class ArticlesApi
         ?array $filter = null,
         ?string $accept_language = null,
         string $contentType = self::contentTypes['getAvailableArticleTypesList'][0]
-    ): \Tyre24\Common\Model\GetAvailableArticleTypesList200Response|\Tyre24\Common\Model\GetAvailableArticleTypesList400Response|\Tyre24\Common\Model\GetAvailableArticleTypesList401Response
-    {
+    ): \Tyre24\Common\Model\GetAvailableArticleTypesList200Response|\Tyre24\Common\Model\GetAvailableArticleTypesList400Response|\Tyre24\Common\Model\GetAvailableArticleTypesList401Response {
         list($response) = $this->getAvailableArticleTypesListWithHttpInfo($country, $filter, $accept_language, $contentType);
         return $response;
     }
@@ -167,8 +167,7 @@ class ArticlesApi
         ?array $filter = null,
         ?string $accept_language = null,
         string $contentType = self::contentTypes['getAvailableArticleTypesList'][0]
-    ): array
-    {
+    ): array {
         $request = $this->getAvailableArticleTypesListRequest($country, $filter, $accept_language, $contentType);
 
         try {
@@ -194,9 +193,9 @@ class ArticlesApi
             $statusCode = $response->getStatusCode();
 
 
-            switch($statusCode) {
+            switch ($statusCode) {
                 case 200:
-                    if (in_array('\Tyre24\Common\Model\GetAvailableArticleTypesList200Response', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Tyre24\Common\Model\GetAvailableArticleTypesList200Response', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -223,7 +222,7 @@ class ArticlesApi
                         $response->getHeaders()
                     ];
                 case 400:
-                    if (in_array('\Tyre24\Common\Model\GetAvailableArticleTypesList400Response', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Tyre24\Common\Model\GetAvailableArticleTypesList400Response', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -250,7 +249,7 @@ class ArticlesApi
                         $response->getHeaders()
                     ];
                 case 401:
-                    if (in_array('\Tyre24\Common\Model\GetAvailableArticleTypesList401Response', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Tyre24\Common\Model\GetAvailableArticleTypesList401Response', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -292,7 +291,7 @@ class ArticlesApi
             }
 
             $returnType = '\Tyre24\Common\Model\GetAvailableArticleTypesList200Response';
-            if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+            if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                 $content = $response->getBody(); //stream goes to serializer
             } else {
                 $content = (string) $response->getBody();
@@ -368,8 +367,7 @@ class ArticlesApi
         ?array $filter = null,
         ?string $accept_language = null,
         string $contentType = self::contentTypes['getAvailableArticleTypesList'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         return $this->getAvailableArticleTypesListAsyncWithHttpInfo($country, $filter, $accept_language, $contentType)
             ->then(
                 function ($response) {
@@ -396,8 +394,7 @@ class ArticlesApi
         ?array $filter = null,
         ?string $accept_language = null,
         string $contentType = self::contentTypes['getAvailableArticleTypesList'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         $returnType = '\Tyre24\Common\Model\GetAvailableArticleTypesList200Response';
         $request = $this->getAvailableArticleTypesListRequest($country, $filter, $accept_language, $contentType);
 
@@ -405,7 +402,7 @@ class ArticlesApi
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
                 function ($response) use ($returnType) {
-                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -453,8 +450,7 @@ class ArticlesApi
         ?array $filter = null,
         ?string $accept_language = null,
         string $contentType = self::contentTypes['getAvailableArticleTypesList'][0]
-    ): Request
-    {
+    ): Request {
 
         // verify the required parameter 'country' is set
         if ($country === null || (is_array($country) && count($country) === 0)) {

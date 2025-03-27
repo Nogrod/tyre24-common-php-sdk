@@ -1,4 +1,5 @@
 <?php
+
 /**
  * GetAvailableOrderStatusesListFilterParameterInner
  *
@@ -514,7 +515,7 @@ class GetAvailableOrderStatusesListFilterParameterInner implements ModelInterfac
     #[ReturnTypeWillChange]
     public function jsonSerialize(): mixed
     {
-       return ObjectSerializer::sanitizeForSerialization($this);
+        return ObjectSerializer::sanitizeForSerialization($this);
     }
 
     /**

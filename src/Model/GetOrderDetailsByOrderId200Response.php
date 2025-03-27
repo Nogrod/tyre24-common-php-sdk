@@ -1,4 +1,5 @@
 <?php
+
 /**
  * GetOrderDetailsByOrderId200Response
  *
@@ -378,7 +379,7 @@ class GetOrderDetailsByOrderId200Response implements ModelInterface, ArrayAccess
     #[ReturnTypeWillChange]
     public function jsonSerialize(): mixed
     {
-       return ObjectSerializer::sanitizeForSerialization($this);
+        return ObjectSerializer::sanitizeForSerialization($this);
     }
 
     /**
