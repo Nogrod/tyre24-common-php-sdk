@@ -5,10 +5,12 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **buyer** | [**\Tyre24\Common\Model\BusinessPartner**](.md) | All information of the buyer |
+**order_contact** | [**\Tyre24\Common\Model\OrderContact**](.md) | The contact person who placed the order. | [optional]
 **seller** | [**\Tyre24\Common\Model\BusinessPartner**](.md) | All information of the seller. Note: This property is only returned when logged in with a retailer account. | [optional]
 **child_branch** | [**\Tyre24\Common\Model\ChildBranch**](.md) | Child branch information | [optional]
 **has_coupon** | **bool** | True if the order includes coupon as a gift, otherwise false |
 **coupon_status** | **int** | Coupon status. 0 &#x3D; not printed, 1 &#x3D; printed, 2 &#x3D; used for 800 eur coupon |
+**alzura_pay_invoice_id** | **string** | The ALZURA PAY invoice id, if given. | [optional]
 **is_payed** | **bool** | True if the order was payed for, otherwise false |
 **can_be_cancelled** | **bool** | Describes if the order can be cancelled. This field will only be in the response, if authenticated as a retailer. | [optional]
 **is_partially_cancelled** | **bool** | Describes if the order is partially cancelled |

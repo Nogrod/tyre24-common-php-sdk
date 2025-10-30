@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Tax
+ * OrderContact
  *
  * PHP version 8.1
  *
@@ -36,14 +36,14 @@ use ReturnTypeWillChange;
 use Tyre24\Common\ObjectSerializer;
 
 /**
- * Tax Class Doc Comment
+ * OrderContact Class Doc Comment
  *
  * @package  Tyre24\Common
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class Tax implements ModelInterface, ArrayAccess, JsonSerializable
+class OrderContact implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -52,7 +52,7 @@ class Tax implements ModelInterface, ArrayAccess, JsonSerializable
       *
       * @var string
       */
-    protected static string $openAPIModelName = 'Tax';
+    protected static string $openAPIModelName = 'OrderContact';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -60,8 +60,10 @@ class Tax implements ModelInterface, ArrayAccess, JsonSerializable
       * @var array<string, string>
       */
     protected static array $openAPITypes = [
-        'tax_number' => 'string',
-        'sales_tax_identification_number' => 'string'
+        'id' => 'int',
+        'history_id' => 'int',
+        'first_name' => 'string',
+        'last_name' => 'string'
     ];
 
     /**
@@ -70,8 +72,10 @@ class Tax implements ModelInterface, ArrayAccess, JsonSerializable
       * @var array<string, string|null>
       */
     protected static array $openAPIFormats = [
-        'tax_number' => null,
-        'sales_tax_identification_number' => null
+        'id' => null,
+        'history_id' => null,
+        'first_name' => null,
+        'last_name' => null
     ];
 
     /**
@@ -80,8 +84,10 @@ class Tax implements ModelInterface, ArrayAccess, JsonSerializable
       * @var array<string, bool>
       */
     protected static array $openAPINullables = [
-        'tax_number' => false,
-        'sales_tax_identification_number' => false
+        'id' => false,
+        'history_id' => false,
+        'first_name' => false,
+        'last_name' => false
     ];
 
     /**
@@ -170,8 +176,10 @@ class Tax implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'tax_number' => 'tax_number',
-        'sales_tax_identification_number' => 'sales_tax_identification_number'
+        'id' => 'id',
+        'history_id' => 'history_id',
+        'first_name' => 'first_name',
+        'last_name' => 'last_name'
     ];
 
     /**
@@ -180,8 +188,10 @@ class Tax implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $setters = [
-        'tax_number' => 'setTaxNumber',
-        'sales_tax_identification_number' => 'setSalesTaxIdentificationNumber'
+        'id' => 'setId',
+        'history_id' => 'setHistoryId',
+        'first_name' => 'setFirstName',
+        'last_name' => 'setLastName'
     ];
 
     /**
@@ -190,8 +200,10 @@ class Tax implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $getters = [
-        'tax_number' => 'getTaxNumber',
-        'sales_tax_identification_number' => 'getSalesTaxIdentificationNumber'
+        'id' => 'getId',
+        'history_id' => 'getHistoryId',
+        'first_name' => 'getFirstName',
+        'last_name' => 'getLastName'
     ];
 
     /**
@@ -250,8 +262,10 @@ class Tax implements ModelInterface, ArrayAccess, JsonSerializable
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('tax_number', $data ?? [], null);
-        $this->setIfExists('sales_tax_identification_number', $data ?? [], null);
+        $this->setIfExists('id', $data ?? [], null);
+        $this->setIfExists('history_id', $data ?? [], null);
+        $this->setIfExists('first_name', $data ?? [], null);
+        $this->setIfExists('last_name', $data ?? [], null);
     }
 
     /**
@@ -281,6 +295,18 @@ class Tax implements ModelInterface, ArrayAccess, JsonSerializable
     {
         $invalidProperties = [];
 
+        if ($this->container['id'] === null) {
+            $invalidProperties[] = "'id' can't be null";
+        }
+        if ($this->container['history_id'] === null) {
+            $invalidProperties[] = "'history_id' can't be null";
+        }
+        if ($this->container['first_name'] === null) {
+            $invalidProperties[] = "'first_name' can't be null";
+        }
+        if ($this->container['last_name'] === null) {
+            $invalidProperties[] = "'last_name' can't be null";
+        }
         return $invalidProperties;
     }
 
@@ -297,55 +323,109 @@ class Tax implements ModelInterface, ArrayAccess, JsonSerializable
 
 
     /**
-     * Gets tax_number
+     * Gets id
      *
-     * @return string|null
+     * @return int
      */
-    public function getTaxNumber(): ?string
+    public function getId(): int
     {
-        return $this->container['tax_number'];
+        return $this->container['id'];
     }
 
     /**
-     * Sets tax_number
+     * Sets id
      *
-     * @param string|null $tax_number Tax number
+     * @param int $id The unique id of the contact
      *
      * @return $this
      */
-    public function setTaxNumber(?string $tax_number): static
+    public function setId(int $id): static
     {
-        if (is_null($tax_number)) {
-            throw new InvalidArgumentException('non-nullable tax_number cannot be null');
+        if (is_null($id)) {
+            throw new InvalidArgumentException('non-nullable id cannot be null');
         }
-        $this->container['tax_number'] = $tax_number;
+        $this->container['id'] = $id;
 
         return $this;
     }
 
     /**
-     * Gets sales_tax_identification_number
+     * Gets history_id
      *
-     * @return string|null
+     * @return int
      */
-    public function getSalesTaxIdentificationNumber(): ?string
+    public function getHistoryId(): int
     {
-        return $this->container['sales_tax_identification_number'];
+        return $this->container['history_id'];
     }
 
     /**
-     * Sets sales_tax_identification_number
+     * Sets history_id
      *
-     * @param string|null $sales_tax_identification_number Sales tax identification number
+     * @param int $history_id The unique history of the contact
      *
      * @return $this
      */
-    public function setSalesTaxIdentificationNumber(?string $sales_tax_identification_number): static
+    public function setHistoryId(int $history_id): static
     {
-        if (is_null($sales_tax_identification_number)) {
-            throw new InvalidArgumentException('non-nullable sales_tax_identification_number cannot be null');
+        if (is_null($history_id)) {
+            throw new InvalidArgumentException('non-nullable history_id cannot be null');
         }
-        $this->container['sales_tax_identification_number'] = $sales_tax_identification_number;
+        $this->container['history_id'] = $history_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets first_name
+     *
+     * @return string
+     */
+    public function getFirstName(): string
+    {
+        return $this->container['first_name'];
+    }
+
+    /**
+     * Sets first_name
+     *
+     * @param string $first_name The firstname of the contact who placed the order
+     *
+     * @return $this
+     */
+    public function setFirstName(string $first_name): static
+    {
+        if (is_null($first_name)) {
+            throw new InvalidArgumentException('non-nullable first_name cannot be null');
+        }
+        $this->container['first_name'] = $first_name;
+
+        return $this;
+    }
+
+    /**
+     * Gets last_name
+     *
+     * @return string
+     */
+    public function getLastName(): string
+    {
+        return $this->container['last_name'];
+    }
+
+    /**
+     * Sets last_name
+     *
+     * @param string $last_name The lastname of the contact who placed order
+     *
+     * @return $this
+     */
+    public function setLastName(string $last_name): static
+    {
+        if (is_null($last_name)) {
+            throw new InvalidArgumentException('non-nullable last_name cannot be null');
+        }
+        $this->container['last_name'] = $last_name;
 
         return $this;
     }

@@ -125,16 +125,26 @@ info:
 
         # Changelog
 
-        ## Added endpoints
+        ## Changes in responses
+        ### 03.09.2025
+        #### GET /common/order/{order}
 
-        - `PATCH /common/message/read`
+        Changes for status code `200`:
 
+        ```json
+        {
+            "propertiesAdded": [
+                "order_contact",
+                "alzura_pay_invoice_id"
+            ]
+        }
+        ```
 
     contact:
         name: 'ALZURA AG'
         url: 'https://www.alzura.com'
         email: info@alzura.com
-    version: '1.1'
+    version: '1.2'
 servers:
     -
         url: 'https://api-b2b.alzura.com'
@@ -306,6 +316,7 @@ paths:
                                 properties:
                                     data: { $ref: '#/components/schemas/AccessControlErrorResponse' }
                                 type: object
+            deprecated: false
             security:
                 -
                     X-AUTH-TOKEN: []
@@ -493,6 +504,7 @@ paths:
                                 properties:
                                     data: { $ref: '#/components/schemas/AccessControlErrorResponse' }
                                 type: object
+            deprecated: false
             security:
                 -
                     X-AUTH-TOKEN: []
@@ -522,6 +534,7 @@ paths:
                                 properties:
                                     data: { $ref: '#/components/schemas/ResponseAuthError' }
                                 type: object
+            deprecated: false
             security:
                 -
                     basicAuth: []
@@ -572,6 +585,7 @@ paths:
                                 properties:
                                     data: { $ref: '#/components/schemas/AccessControlErrorResponse' }
                                 type: object
+            deprecated: false
             security:
                 -
                     X-AUTH-TOKEN: []
@@ -635,6 +649,7 @@ paths:
                                 properties:
                                     data: { $ref: '#/components/schemas/AccessControlErrorResponse' }
                                 type: object
+            deprecated: false
             security:
                 -
                     X-AUTH-TOKEN: []
@@ -794,6 +809,7 @@ paths:
                                 properties:
                                     data: { $ref: '#/components/schemas/AccessControlErrorResponse' }
                                 type: object
+            deprecated: false
             security:
                 -
                     X-AUTH-TOKEN: []
@@ -913,6 +929,7 @@ paths:
                                 properties:
                                     data: { $ref: '#/components/schemas/AccessControlErrorResponse' }
                                 type: object
+            deprecated: false
             security:
                 -
                     X-AUTH-TOKEN: []
@@ -964,6 +981,7 @@ paths:
                                 properties:
                                     data: { $ref: '#/components/schemas/AccessControlErrorResponse' }
                                 type: object
+            deprecated: false
             security:
                 -
                     X-AUTH-TOKEN: []
@@ -1087,6 +1105,7 @@ paths:
                                 properties:
                                     data: { $ref: '#/components/schemas/AccessControlErrorResponse' }
                                 type: object
+            deprecated: false
             security:
                 -
                     X-AUTH-TOKEN: []
@@ -1108,6 +1127,8 @@ paths:
                                 properties:
                                     data: { type: array, items: { $ref: '#/components/schemas/ResponsePing' } }
                                 type: object
+            deprecated: false
+            security: []
 components:
     schemas:
         AccessControlErrorResponse:
@@ -1252,6 +1273,10 @@ components:
                     description: 'All information of the buyer'
                     type: object
                     $ref: '#/components/schemas/businessPartner'
+                order_contact:
+                    description: 'The contact person who placed the order.'
+                    type: object
+                    $ref: '#/components/schemas/OrderContact'
                 seller:
                     description: 'All information of the seller. Note: This property is only returned when logged in with a retailer account.'
                     type: object
@@ -1268,6 +1293,10 @@ components:
                     description: 'Coupon status. 0 = not printed, 1 = printed, 2 = used for 800 eur coupon'
                     type: integer
                     example: 0
+                alzura_pay_invoice_id:
+                    description: 'The ALZURA PAY invoice id, if given.'
+                    type: string
+                    example: 123456-1234-1234-123456789ABCD
                 is_payed:
                     description: 'True if the order was payed for, otherwise false'
                     type: boolean
@@ -1604,9 +1633,13 @@ components:
                 - recipient_code
             properties:
                 contact:
-                    description: 'Contact information'
+                    description: 'The main contact information of the buyer'
                     type: object
                     $ref: '#/components/schemas/Contact'
+                buyer_invoice_route_id:
+                    description: 'e-invoice buyer route ID'
+                    type: string
+                    example: 04-01100001234512345-06
                 id:
                     description: 'Tyre24 id of the customer'
                     type: integer
@@ -1638,6 +1671,30 @@ components:
                     description: 'Information about cooperation'
                     type: object
                     $ref: '#/components/schemas/Organisation'
+                rating:
+                    description: 'The rating of the supplier, where 1 is good and 0 is bad. If this point is not given the rating is neutral.'
+                    type: integer
+            type: object
+        OrderContact:
+            title: OrderContact
+            required:
+                - id
+                - history_id
+                - first_name
+                - last_name
+            properties:
+                id:
+                    description: 'The unique id of the contact'
+                    type: integer
+                history_id:
+                    description: 'The unique history of the contact'
+                    type: integer
+                first_name:
+                    description: 'The firstname of the contact who placed the order'
+                    type: string
+                last_name:
+                    description: 'The lastname of the contact who placed order'
+                    type: string
             type: object
         ChildBranch:
             title: ChildBranch
@@ -1959,6 +2016,10 @@ components:
                     description: 'Contact information'
                     type: object
                     $ref: '#/components/schemas/ContactLatest'
+                buyer_invoice_route_id:
+                    description: 'e-invoice buyer route ID'
+                    type: string
+                    example: 04-01100001234512345-06
                 id:
                     description: 'Tyre24 id of the customer'
                     type: integer
@@ -1990,6 +2051,9 @@ components:
                     description: 'Information about cooperation'
                     type: object
                     $ref: '#/components/schemas/Organisation'
+                rating:
+                    description: 'The rating of the supplier, where 1 is good and 0 is bad. If this point is not given the rating is neutral.'
+                    type: integer
             type: object
         Contact:
             title: Contact
@@ -1997,7 +2061,15 @@ components:
                 name:
                     description: 'Full name'
                     type: string
-                    example: 'Max Musterman'
+                    example: 'Max Mustermann'
+                firstname:
+                    description: 'Fristname of the contact'
+                    type: string
+                    example: Max
+                lastname:
+                    description: 'Lastname of the contact'
+                    type: string
+                    example: Mustermann
                 email:
                     description: Email
                     type: string
@@ -2121,6 +2193,8 @@ components:
             required:
                 - number
                 - name
+                - show_name
+                - show_number
             properties:
                 number:
                     description: 'Number of the cooperation'
@@ -2130,6 +2204,18 @@ components:
                     description: 'Name of the cooperation'
                     type: string
                     example: KAGUMA
+                show_name:
+                    description: |-
+                        Indicates whether the actual Cooperation name is visible,
+                                    based on the visibility settings for the Cooperation.
+                    type: boolean
+                    example: true
+                show_number:
+                    description: |-
+                        Indicates whether the actual Cooperation number is visible,
+                                    based on the visibility settings for the Cooperation.
+                    type: boolean
+                    example: true
             type: object
         DeliveryAddress:
             title: DeliveryAddress
@@ -2299,7 +2385,15 @@ components:
                 name:
                     description: 'Full name'
                     type: string
-                    example: 'Max Musterman'
+                    example: 'Max Mustermann'
+                firstname:
+                    description: 'Fristname of the contact'
+                    type: string
+                    example: Max
+                lastname:
+                    description: 'Lastname of the contact'
+                    type: string
+                    example: Mustermann
                 phone:
                     description: Phone
                     type: string
@@ -2465,3 +2559,4 @@ x-tagGroups:
             - shipping
             - payments
             - ping
+            - tec-com
