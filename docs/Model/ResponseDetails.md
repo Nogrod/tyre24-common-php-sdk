@@ -4,10 +4,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**buyer** | [**\Tyre24\Common\Model\BusinessPartner**](.md) | All information of the buyer |
-**order_contact** | [**\Tyre24\Common\Model\OrderContact**](.md) | The contact person who placed the order. | [optional]
-**seller** | [**\Tyre24\Common\Model\BusinessPartner**](.md) | All information of the seller. Note: This property is only returned when logged in with a retailer account. | [optional]
-**child_branch** | [**\Tyre24\Common\Model\ChildBranch**](.md) | Child branch information | [optional]
+**buyer** | [**\Tyre24\Common\Model\BusinessPartner**](BusinessPartner.md) | All information of the buyer |
+**order_contact** | [**\Tyre24\Common\Model\OrderContact**](OrderContact.md) | The contact person who placed the order. | [optional]
+**seller** | [**\Tyre24\Common\Model\BusinessPartner**](BusinessPartner.md) | All information of the seller. Note: This property is only returned when logged in with a retailer account. | [optional]
+**child_branch** | [**\Tyre24\Common\Model\ChildBranch**](ChildBranch.md) | Child branch information | [optional]
 **has_coupon** | **bool** | True if the order includes coupon as a gift, otherwise false |
 **coupon_status** | **int** | Coupon status. 0 &#x3D; not printed, 1 &#x3D; printed, 2 &#x3D; used for 800 eur coupon |
 **alzura_pay_invoice_id** | **string** | The ALZURA PAY invoice id, if given. | [optional]
@@ -25,11 +25,11 @@ Name | Type | Description | Notes
 **reference_number** | **string** | Reference number of an order, if given |
 **country** | **string** | The country of the order, 2 letter iso-code lower case |
 **comment** | **string** | A comment for the order |
-**currency** | [**\Tyre24\Common\Model\Currency**](.md) | Currency information for this order | [optional]
-**shipping** | [**\Tyre24\Common\Model\Shipping**](.md) | Shipping information |
-**assurance** | [**\Tyre24\Common\Model\Assurance**](.md) | Insurance information |
-**payment** | [**\Tyre24\Common\Model\Payment**](.md) | Payment information |
-**invoice** | [**\Tyre24\Common\Model\Invoice**](.md) | Contains seller invoice information |
+**currency** | [**\Tyre24\Common\Model\Currency**](Currency.md) | Currency information for this order | [optional]
+**shipping** | [**\Tyre24\Common\Model\Shipping**](Shipping.md) | Shipping information |
+**assurance** | [**\Tyre24\Common\Model\Assurance**](Assurance.md) | Insurance information |
+**payment** | [**\Tyre24\Common\Model\Payment**](Payment.md) | Payment information |
+**invoice** | [**\Tyre24\Common\Model\Invoice**](Invoice.md) | Contains seller invoice information |
 **messages** | [**\Tyre24\Common\Model\Message[]**](Message.md) | List of chat messages for this order |
 **documents** | [**\Tyre24\Common\Model\Document[]**](Document.md) | List of documents for this order |
 **status_comment** | **string** | Comment to the current oder status |
@@ -40,8 +40,8 @@ Name | Type | Description | Notes
 **status** | **int** | Status of the order |
 **is_marketplace** | **bool** | True if marketplace order otherwise false | [optional]
 **positions** | [**\Tyre24\Common\Model\OrderPosition[]**](OrderPosition.md) | List of associated positions of the order | [optional]
-**sum** | [**\Tyre24\Common\Model\Price**](.md) | The summed up price of all product positions of the given order | [optional]
-**total_sum** | [**\Tyre24\Common\Model\Price**](.md) | The final price that has to be paid by the retailer (except for any possible &#x60;deposit&#x60;). This price includes, among other things, the item total (&#x60;sum&#x60;), costs of the payment method (&#x60;payment.method.price&#x60;), costs for alternative delivery address (&#x60;shipping.delivery_address.price&#x60;), shipping costs (&#x60;shipping.method.price&#x60;) and possible discounts (&#x60;shipping.handling_fee&#x60;). | [optional]
-**deposit** | [**\Tyre24\Common\Model\Price**](.md) | Summed up deposit price for the order | [optional]
+**sum** | [**\Tyre24\Common\Model\Price**](Price.md) | The summed up price of all product positions of the given order | [optional]
+**total_sum** | [**\Tyre24\Common\Model\Price**](Price.md) | The final price that has to be paid by the retailer (except for any possible &#x60;deposit&#x60;). This price includes, among other things, the item total (&#x60;sum&#x60;), costs of the payment method (&#x60;payment.method.price&#x60;), costs for alternative delivery address (&#x60;shipping.delivery_address.price&#x60;), shipping costs (&#x60;shipping.method.price&#x60;) and possible discounts (&#x60;shipping.handling_fee&#x60;). | [optional]
+**deposit** | [**\Tyre24\Common\Model\Price**](Price.md) | Summed up deposit price for the order | [optional]
 
 [[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)
