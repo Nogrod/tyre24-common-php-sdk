@@ -1,4 +1,4 @@
-# # OrderPosition
+# OrderPosition
 
 ## Properties
 

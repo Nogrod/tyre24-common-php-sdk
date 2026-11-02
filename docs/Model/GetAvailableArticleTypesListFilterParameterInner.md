@@ -1,4 +1,4 @@
-# # GetAvailableArticleTypesListFilterParameterInner
+# GetAvailableArticleTypesListFilterParameterInner
 
 ## Properties
 

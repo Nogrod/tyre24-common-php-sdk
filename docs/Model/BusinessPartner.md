@@ -1,4 +1,4 @@
-# # BusinessPartner
+# BusinessPartner
 
 ## Properties
 

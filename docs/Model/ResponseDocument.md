@@ -1,4 +1,4 @@
-# # ResponseDocument
+# ResponseDocument
 
 ## Properties
 

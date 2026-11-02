@@ -1,4 +1,4 @@
-# # MessageIds
+# MessageIds
 
 ## Properties
 

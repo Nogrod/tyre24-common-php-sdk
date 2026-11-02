@@ -1,4 +1,4 @@
-# # ResponseDetails
+# ResponseDetails
 
 ## Properties
 

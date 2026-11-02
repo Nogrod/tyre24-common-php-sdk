@@ -1,4 +1,4 @@
-# # ShippingMethod
+# ShippingMethod
 
 ## Properties
 

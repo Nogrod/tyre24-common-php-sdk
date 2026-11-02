@@ -1,4 +1,4 @@
-# # ContactLatest
+# ContactLatest
 
 ## Properties
 

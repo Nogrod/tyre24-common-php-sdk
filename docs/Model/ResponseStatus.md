@@ -1,4 +1,4 @@
-# # ResponseStatus
+# ResponseStatus
 
 ## Properties
 

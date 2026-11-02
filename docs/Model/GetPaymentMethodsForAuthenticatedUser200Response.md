@@ -1,4 +1,4 @@
-# # GetPaymentMethodsForAuthenticatedUser200Response
+# GetPaymentMethodsForAuthenticatedUser200Response
 
 ## Properties
 

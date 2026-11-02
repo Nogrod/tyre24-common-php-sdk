@@ -1,4 +1,4 @@
-# # ResponseOrderLatest
+# ResponseOrderLatest
 
 ## Properties
 

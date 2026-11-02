@@ -1,4 +1,4 @@
-# # Tax
+# Tax
 
 ## Properties
 

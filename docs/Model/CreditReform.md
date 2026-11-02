@@ -1,4 +1,4 @@
-# # CreditReform
+# CreditReform
 
 ## Properties
 

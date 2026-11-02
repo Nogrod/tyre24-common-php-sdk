@@ -1,4 +1,4 @@
-# # LoginUser401Response
+# LoginUser401Response
 
 ## Properties
 

@@ -1,4 +1,4 @@
-# # LoginToken
+# LoginToken
 
 ## Properties
 

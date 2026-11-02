@@ -1,4 +1,4 @@
-# # ResponseArticleType
+# ResponseArticleType
 
 ## Properties
 

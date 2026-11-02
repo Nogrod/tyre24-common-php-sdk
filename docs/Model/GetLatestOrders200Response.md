@@ -1,4 +1,4 @@
-# # GetLatestOrders200Response
+# GetLatestOrders200Response
 
 ## Properties
 

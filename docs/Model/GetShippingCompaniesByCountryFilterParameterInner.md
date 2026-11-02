@@ -1,4 +1,4 @@
-# # GetShippingCompaniesByCountryFilterParameterInner
+# GetShippingCompaniesByCountryFilterParameterInner
 
 ## Properties
 

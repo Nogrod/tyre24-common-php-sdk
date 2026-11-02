@@ -1,4 +1,4 @@
-# # GetShippingCompaniesByCountry200Response
+# GetShippingCompaniesByCountry200Response
 
 ## Properties
 

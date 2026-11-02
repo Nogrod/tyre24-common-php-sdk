@@ -1,4 +1,4 @@
-# # Method
+# Method
 
 ## Properties
 

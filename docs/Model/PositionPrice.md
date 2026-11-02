@@ -1,4 +1,4 @@
-# # PositionPrice
+# PositionPrice
 
 ## Properties
 

@@ -1,4 +1,4 @@
-# # GetDocumentsByTypeAndId200Response
+# GetDocumentsByTypeAndId200Response
 
 ## Properties
 

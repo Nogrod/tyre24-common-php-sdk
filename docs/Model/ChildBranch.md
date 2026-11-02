@@ -1,4 +1,4 @@
-# # ChildBranch
+# ChildBranch
 
 ## Properties
 

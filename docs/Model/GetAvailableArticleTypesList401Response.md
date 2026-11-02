@@ -1,4 +1,4 @@
-# # GetAvailableArticleTypesList401Response
+# GetAvailableArticleTypesList401Response
 
 ## Properties
 

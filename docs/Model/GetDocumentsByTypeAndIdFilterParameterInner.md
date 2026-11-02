@@ -1,4 +1,4 @@
-# # GetDocumentsByTypeAndIdFilterParameterInner
+# GetDocumentsByTypeAndIdFilterParameterInner
 
 ## Properties
 

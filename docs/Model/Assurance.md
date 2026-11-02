@@ -1,4 +1,4 @@
-# # Assurance
+# Assurance
 
 ## Properties
 

@@ -1,4 +1,4 @@
-# # ResponseCommonGetShippingCompany
+# ResponseCommonGetShippingCompany
 
 ## Properties
 

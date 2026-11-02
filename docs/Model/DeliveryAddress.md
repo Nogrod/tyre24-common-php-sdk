@@ -1,4 +1,4 @@
-# # DeliveryAddress
+# DeliveryAddress
 
 ## Properties
 

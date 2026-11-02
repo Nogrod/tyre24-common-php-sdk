@@ -1,4 +1,4 @@
-# # Message
+# Message
 
 ## Properties
 

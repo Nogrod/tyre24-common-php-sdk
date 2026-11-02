@@ -1,4 +1,4 @@
-# # GetAvailableOrderStatusesList200Response
+# GetAvailableOrderStatusesList200Response
 
 ## Properties
 

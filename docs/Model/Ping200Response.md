@@ -1,4 +1,4 @@
-# # Ping200Response
+# Ping200Response
 
 ## Properties
 
